@@ -2,7 +2,7 @@
 // Created by Dmitry Morozov on 21/8/22.
 //
 
-
+#include "shared/Team_Tasks.hpp"
 
 #include <iostream>
 
@@ -12,7 +12,7 @@
  * @return 0
  */
 int main () {
-    std::cout << "HOME WORK x\n\nTask x" << std::endl;
+    std::cout << "Week_1\n\nTask : Task Tracker" << std::endl;
 
 
     return 0;
