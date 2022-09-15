@@ -6,6 +6,7 @@
 #define COURSERA_YELLOW_BELT_DEV_TEAM_TASKS_HPP
 
 #include <map>
+#include <string>
 #include <tuple>
 
 
@@ -21,10 +22,11 @@ enum class TaskStatus {
 using TasksInfo = std::map<TaskStatus, int>;
 
 class TeamTasks {
+
 public:
 
     /// @brief Get info about tasks for certain person
-    const TasksInfo &GetPersonTasksInfo (const std::string &person) const;
+    [[nodiscard]] const TasksInfo &GetPersonTasksInfo (const std::string &person) const;
 
 
     /// @brief Add new task ( with NEW status ) for certain person
@@ -33,6 +35,10 @@ public:
 
     /// @brief Update statuses for certain person by given number of tasks
     std::tuple<TasksInfo, TasksInfo> PerformPersonTasks (const std::string &person, int task_count);
+
+private:
+    std::map<std::string, TasksInfo> tasks;
+
 };
 
 #endif //COURSERA_YELLOW_BELT_DEV_TEAM_TASKS_HPP
