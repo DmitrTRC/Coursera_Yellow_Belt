@@ -37,6 +37,10 @@ int main() {
     std::cout << "Untouched Ivan's tasks: ";
     PrintTasksInfo(untouched_tasks);
 
+    std::cout << std::string(30, '-') << std::endl;
+    PrintTasksInfo(tasks.GetPersonTasksInfo("Ivan"));
+    std::cout << std::string(30, '-') << std::endl;
+
     std::tie(updated_tasks, untouched_tasks) =
             tasks.PerformPersonTasks("Ivan", 2);
     std::cout << "Updated Ivan's tasks: ";
