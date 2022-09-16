@@ -7,46 +7,33 @@
 #include <iostream>
 #include <tuple>
 
+
 // Принимаем словарь по значению, чтобы иметь возможность
 // обращаться к отсутствующим ключам с помощью [] и получать 0,
 // не меняя при этом исходный словарь
-void PrintTasksInfo(TasksInfo tasks_info) {
+void PrintTasksInfo (TasksInfo tasks_info) {
     std::cout << tasks_info[TaskStatus::NEW] << " new tasks" <<
-         ", " << tasks_info[TaskStatus::IN_PROGRESS] << " tasks in progress" <<
-         ", " << tasks_info[TaskStatus::TESTING] << " tasks are being tested" <<
-         ", " << tasks_info[TaskStatus::DONE] << " tasks are done" << std::endl;
+              ", " << tasks_info[TaskStatus::IN_PROGRESS] << " tasks in progress" <<
+              ", " << tasks_info[TaskStatus::TESTING] << " tasks are being tested" <<
+              ", " << tasks_info[TaskStatus::DONE] << " tasks are done" << std::endl;
 }
 
-int main() {
+int main () {
     TeamTasks tasks;
-    tasks.AddNewTask("Ilia");
-    for (int i = 0; i < 3; ++i) {
-        tasks.AddNewTask("Ivan");
+
+    for (int i = 0; i < 5; ++i) {
+        tasks.AddNewTask ("Alice");
     }
-    std::cout << "Ilia's tasks: ";
-    PrintTasksInfo(tasks.GetPersonTasksInfo("Ilia"));
-    std::cout << "Ivan's tasks: ";
-    PrintTasksInfo(tasks.GetPersonTasksInfo("Ivan"));
 
-    TasksInfo updated_tasks, untouched_tasks;
+    PrintTasksInfo (tasks.GetPersonTasksInfo ("Alice"));
+    std::cout << "----------------------------------" << std::endl;
 
-    std::tie(updated_tasks, untouched_tasks) =
-            tasks.PerformPersonTasks("Ivan", 2);
-    std::cout << "Updated Ivan's tasks: ";
-    PrintTasksInfo(updated_tasks);
-    std::cout << "Untouched Ivan's tasks: ";
-    PrintTasksInfo(untouched_tasks);
+    tasks.PerformPersonTasks ("Alice", 5);
+    auto [updated_tasks, untouched_tasks] = tasks.PerformPersonTasks ("Alice", 5);
+    PrintTasksInfo (updated_tasks);
+    PrintTasksInfo (untouched_tasks);
+    std::cout << "----------------------------------" << std::endl;
 
-    std::cout << std::string(30, '-') << std::endl;
-    PrintTasksInfo(tasks.GetPersonTasksInfo("Ivan"));
-    std::cout << std::string(30, '-') << std::endl;
-
-    std::tie(updated_tasks, untouched_tasks) =
-            tasks.PerformPersonTasks("Ivan", 2);
-    std::cout << "Updated Ivan's tasks: ";
-    PrintTasksInfo(updated_tasks);
-    std::cout << "Untouched Ivan's tasks: ";
-    PrintTasksInfo(untouched_tasks);
 
     return 0;
 }
