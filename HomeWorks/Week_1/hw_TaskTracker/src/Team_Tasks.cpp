@@ -63,9 +63,7 @@ std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks (const std::strin
             untouched_tasks[task] = counter;
             continue;
         }
-        if (task == TaskStatus::DONE) {
-            continue;
-        }
+
         if (task_count >= counter) {
             updated_tasks[static_cast<TaskStatus>(static_cast<int>(task) + 1)] = counter;
             task_count -= counter;
