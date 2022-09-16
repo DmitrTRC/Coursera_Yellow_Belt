@@ -18,6 +18,26 @@ void PrintTasksInfo (TasksInfo tasks_info) {
               ", " << tasks_info[TaskStatus::DONE] << " tasks are done" << std::endl;
 }
 
+//TODO: Refactor print changes
+void PrintTasksChanges (const TasksInfo &tasks_info) {
+
+    for (const auto &[type, count]: tasks_info) {
+        if (tasks_info.count(TaskStatus::NEW) > 0) {
+            std::cout << count << " " << " new tasks" << std::endl;
+        }
+        if (tasks_info.count( TaskStatus::IN_PROGRESS) > 0) {
+            std::cout << count << " " << " tasks in progress" << std::endl;
+        }
+        if (tasks_info.count (TaskStatus::TESTING) > 0) {
+            std::cout << count << " " << " tasks are being tested" << std::endl;
+        }
+        if (tasks_info.count  (TaskStatus::DONE) > 0) {
+            std::cout << count << " " << " tasks are done" << std::endl;
+        }
+    }
+}
+
+
 int main () {
     TeamTasks tasks;
 
@@ -28,10 +48,14 @@ int main () {
     PrintTasksInfo (tasks.GetPersonTasksInfo ("Alice"));
     std::cout << "----------------------------------" << std::endl;
 
-    tasks.PerformPersonTasks ("Alice", 5);
-    auto [updated_tasks, untouched_tasks] = tasks.PerformPersonTasks ("Alice", 5);
-    PrintTasksInfo (updated_tasks);
-    PrintTasksInfo (untouched_tasks);
+    auto [updated, untouched] = tasks.PerformPersonTasks ("Alice", 5);
+    PrintTasksInfo (tasks.GetPersonTasksInfo ("Alice"));
+
+    std::cout << "Updated ";
+    PrintTasksChanges (updated);
+    std::cout << "Untouched ";
+    PrintTasksChanges (untouched);
+    std::cout << std::endl;
     std::cout << "----------------------------------" << std::endl;
 
 
