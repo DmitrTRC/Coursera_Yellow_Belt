@@ -8,12 +8,12 @@
 
 
 void TeamTasks::AddNewTask (const std::string &person) {
-    tasks[person][TaskStatus::NEW]++;
+    _tasks[person][TaskStatus::NEW]++;
 
 }
 
 const TasksInfo &TeamTasks::GetPersonTasksInfo (const std::string &person) const {
-    return tasks.at (person);
+    return _tasks.at (person);
 }
 
 /*
@@ -50,7 +50,7 @@ Updating a dictionary at the same time as iterating over it can lead to unpredic
  */
 std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks (const std::string &person, int task_count) {
     TasksInfo updated_tasks, untouched_tasks;
-    TasksInfo &person_tasks = tasks[person];
+    TasksInfo &person_tasks = _tasks[person];
     for (auto &[task, counter]: person_tasks) {
         if (task_count == 0) {
             untouched_tasks[task] = counter;
@@ -69,23 +69,11 @@ std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks (const std::strin
             task_count = 0;
         }
     }
-//    //clean updated tasks
-//    for (auto &[task, counter]: updated_tasks) {
-//        if (counter == 0) {
-//            updated_tasks.erase (task);
-//        }
-//    }
-//
-//    //clean untouched tasks
-//    for (auto &[task, counter]: untouched_tasks) {
-//        if (counter == 0) {
-//            untouched_tasks.erase (task);
-//        }
-//    }
 
-    //Update person tasks
-    for (auto &[task, counter]: updated_tasks) {
-        person_tasks[task] += counter;
+    for (auto task = TaskStatus::NEW;
+         task != TaskStatus::DONE; task = static_cast<TaskStatus>(static_cast<int>(task) + 1)) {
+        _tasks[person][task] = updated_tasks[task] + untouched_tasks[task];
+
     }
 
 

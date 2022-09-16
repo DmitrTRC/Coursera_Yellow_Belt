@@ -37,7 +37,7 @@ public:
     std::tuple<TasksInfo, TasksInfo> PerformPersonTasks (const std::string &person, int task_count);
 
 private:
-    std::map<std::string, TasksInfo> tasks;
+    std::map<std::string, TasksInfo> _tasks;
 
 };
 
