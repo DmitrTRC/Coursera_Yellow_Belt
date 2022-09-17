@@ -82,7 +82,7 @@ std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks (const std::strin
 
     }
 
-    _tasks[person][TaskStatus::DONE] = updated_tasks[TaskStatus::DONE];
+    _tasks[person][TaskStatus::DONE] += updated_tasks[TaskStatus::DONE];
     //TODO: remove this line after fixing the bug
     std::cout << "_tasks[person][TaskStatus::DONE  ::  ]" << _tasks[person][TaskStatus::DONE] <<
               ", updated_tasks[TaskStatus::DONE]  ::  " << updated_tasks[TaskStatus::DONE] << std::endl;
@@ -97,6 +97,7 @@ std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks (const std::strin
     }
 
     //clear empty tasks in untouched_tasks
+    untouched_tasks.erase (TaskStatus::DONE);
     for (auto it = untouched_tasks.begin (); it != untouched_tasks.end ();) {
         if (it->second == 0) {
             it = untouched_tasks.erase (it);
