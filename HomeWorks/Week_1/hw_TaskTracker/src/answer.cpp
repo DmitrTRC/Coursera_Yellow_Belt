@@ -47,9 +47,7 @@ std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks (const std::strin
             untouched_tasks[task] = counter;
             continue;
         }
-        if (task == TaskStatus::DONE) {
-            continue;
-        }
+
         if (task_count >= counter) {
             updated_tasks[static_cast<TaskStatus>(static_cast<int>(task) + 1)] = counter;
             task_count -= counter;
@@ -66,6 +64,8 @@ std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks (const std::strin
         _tasks[person][task] = updated_tasks[task] + untouched_tasks[task];
 
     }
+
+    _tasks[person][TaskStatus::DONE] = updated_tasks[TaskStatus::DONE];
 
     //clear empty tasks in updated_tasks
     for (auto it = updated_tasks.begin (); it != updated_tasks.end ();) {

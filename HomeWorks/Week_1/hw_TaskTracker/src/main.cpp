@@ -79,9 +79,11 @@ int main () {
     PrintTasksInfo (tasks.GetPersonTasksInfo ("Alice"));
     std::cout << "----------------------------------" << std::endl;
 
-    //TODO: FIXME: Do not append 1 task do DONE status from updated
+    std::cout << "WARNING !!!!!" << std::endl;
     auto [updated3, untouched3] = tasks.PerformPersonTasks ("Alice", 1);
+
     std::cout << "Perform Alice 1 tasks" << std::endl;
+
     PrintTasksInfo (tasks.GetPersonTasksInfo ("Alice"));
 
     std::cout << "[{";
@@ -99,6 +101,8 @@ int main () {
         tasks.AddNewTask ("Alice");
     }
     std::cout << "Add 5 new tasks for Alice" << std::endl;
+    PrintTasksInfo (tasks.GetPersonTasksInfo ("Alice"));
+    std::cout << "----------------------------------" << std::endl;
 
     auto [updated4, untouched4] = tasks.PerformPersonTasks ("Alice", 2);
     std::cout << "Perform Alice 2 tasks" << std::endl;

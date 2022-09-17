@@ -5,6 +5,7 @@
 #include "shared/Team_Tasks.hpp"
 
 #include <string>
+#include <iostream>
 
 
 void TeamTasks::AddNewTask (const std::string &person) {
@@ -47,7 +48,7 @@ Correct output:
 []
 [{"IN_PROGRESS": 5}, {}]
 [{"TESTING": 5}, {}]
-[{"DONE": 1}, {"TESTING": 4}]
+[{"DONE": 1}, {"TESTING": 4}] !!!!!!!!!
 []
 [{"IN_PROGRESS": 2}, {"NEW": 3, "TESTING": 4}]
 {"NEW": 3, "IN_PROGRESS": 2, "TESTING": 4, "DONE": 1}
@@ -81,24 +82,28 @@ std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks (const std::strin
 
     }
 
+    _tasks[person][TaskStatus::DONE] = updated_tasks[TaskStatus::DONE];
+    //TODO: remove this line after fixing the bug
+    std::cout << "_tasks[person][TaskStatus::DONE  ::  ]" << _tasks[person][TaskStatus::DONE] <<
+              ", updated_tasks[TaskStatus::DONE]  ::  " << updated_tasks[TaskStatus::DONE] << std::endl;
+
     //clear empty tasks in updated_tasks
-    for (auto it = updated_tasks.begin(); it != updated_tasks.end();) {
+    for (auto it = updated_tasks.begin (); it != updated_tasks.end ();) {
         if (it->second == 0) {
-            it = updated_tasks.erase(it);
+            it = updated_tasks.erase (it);
         } else {
             ++it;
         }
     }
 
     //clear empty tasks in untouched_tasks
-    for (auto it = untouched_tasks.begin(); it != untouched_tasks.end();) {
+    for (auto it = untouched_tasks.begin (); it != untouched_tasks.end ();) {
         if (it->second == 0) {
-            it = untouched_tasks.erase(it);
+            it = untouched_tasks.erase (it);
         } else {
             ++it;
         }
     }
-
 
 
     return {updated_tasks, untouched_tasks};
