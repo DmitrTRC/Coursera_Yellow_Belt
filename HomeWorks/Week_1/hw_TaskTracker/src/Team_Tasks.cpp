@@ -5,107 +5,116 @@
 #include "shared/Team_Tasks.hpp"
 
 #include <string>
-#include <iostream>
 
 
+/**
+ * It adds a new task to the person's task list
+ *
+ * @param person The name of the person to whom the task is assigned.
+ */
 void TeamTasks::AddNewTask (const std::string &person) {
-    _tasks[person][TaskStatus::NEW]++;
+    ++_tasks[person][TaskStatus::NEW];
 
 }
 
+/**
+ * It returns the next status in the sequence of statuses
+ *
+ * @param status the current status of the task.
+ *
+ * @return The next status in the enum.
+ */
+TaskStatus TeamTasks::_nextStatus (TaskStatus status) const {
+
+    return static_cast<TaskStatus> (static_cast<int> (status) + 1);
+}
+
+/**
+ * It returns a const reference to the TasksInfo object for the person with the given name
+ *
+ * @return A const reference to the TasksInfo object.
+ */
 const TasksInfo &TeamTasks::GetPersonTasksInfo (const std::string &person) const {
     return _tasks.at (person);
 }
 
+/**
+ * It removes all tasks with zero quantity from the tasks map
+ *
+ * @param tasks a map of tasks and their number of unfinished subtasks.
+ */
+void TeamTasks::_clearTasks (TasksInfo &tasks) {
+    for (auto it = tasks.begin (); it != tasks.end ();) {
+        if (it->second == 0) {
+            it = tasks.erase (it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+/**
+ * It takes a map of tasks and a number of tasks to be updated, and returns a map of tasks with the number of tasks updated
+ *
+ * @param tasks a map of task statuses to the number of tasks with that status.
+ * @param task_count the number of tasks to be updated
+ *
+ * @return A map of tasks with updated statuses.
+ */
+TasksInfo TeamTasks::getUpdatedTasks (TasksInfo &tasks, int task_count) {
+    TasksInfo _updated_tasks;
+    for (TaskStatus status = TaskStatus::NEW;
+         status != TaskStatus::DONE;
+         status = _nextStatus (status)) {
+
+        _updated_tasks[_nextStatus (status)] = std::min (task_count, tasks[status]);
+        task_count -= _updated_tasks[_nextStatus (status)];
+    }
+    return _updated_tasks;
+}
+
+/**
+ * It takes a person's tasks and a set of updated tasks, and returns the tasks that were not updated
+ *
+ * @param person_tasks a map of tasks for a person
+ * @param updated_tasks a map of tasks and their statuses, which are to be updated
+ *
+ * @return A map of untouched tasks.
+ */
+TasksInfo TeamTasks::getUntouchedTasks (TasksInfo &person_tasks, TasksInfo &updated_tasks) {
+    TasksInfo _untouched_tasks;
+    for (TaskStatus status = TaskStatus::NEW;
+         status != TaskStatus::DONE;
+         status = _nextStatus (status)) {
+        _untouched_tasks[status] = person_tasks[status] - updated_tasks[_nextStatus (status)];
+        person_tasks[status] += updated_tasks[status] - updated_tasks[_nextStatus (status)];
+    }
+    person_tasks[TaskStatus::DONE] += updated_tasks[TaskStatus::DONE];
+    return _untouched_tasks;
+}
 
 /*
- * Failed case #1/102: (Wrong answer)
-Неправильный результат в 1 строке
+    * @brief Update statuses for certain person by given number of tasks
+    * @param person - person name
+    * @param task_count - number of tasks to perform
+    * @return tuple of updated and untouched tasks
+    */
+std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks (const std::string &person, int tasks_to_perform) {
 
-Input:
-AddNewTasks Alice 5
-PerformPersonTasks Alice 5
-PerformPersonTasks Alice 5
-PerformPersonTasks Alice 1
-AddNewTasks Alice 5
-PerformPersonTasks Alice 2
-GetPersonTasksInfo Alice
-PerformPersonTasks Alice 4
-GetPersonTasksInfo Alice
-
-Your output:
-[]
-[{"NEW": 0, "IN_PROGRESS": 5, "TESTING": 0}, {"NEW": 0, "IN_PROGRESS": 0, "TESTING": 0}]
-[{"NEW": 0, "IN_PROGRESS": 0, "TESTING": 5}, {"NEW": 0, "IN_PROGRESS": 0, "TESTING": 0}]
-[{"NEW": 0, "IN_PROGRESS": 0, "TESTING": 0, "DONE": 1}, {"NEW": 0, "IN_PROGRESS": 0, "TESTING": 4}]
-[]
-[{"NEW": 0, "IN_PROGRESS": 2, "TESTING": 0}, {"NEW": 3, "IN_PROGRESS": 0, "TESTING": 4}]
-{"NEW": 3, "IN_PROGRESS": 2, "TESTING": 4}
-[{"NEW": 0, "IN_PROGRESS": 3, "TESTING": 1}, {"NEW": 0, "IN_PROGRESS": 1, "TESTING": 4}]
-{"NEW": 0, "IN_PROGRESS": 4, "TESTING": 5}
-
-Correct output:
-[]
-[{"IN_PROGRESS": 5}, {}]
-[{"TESTING": 5}, {}]
-[{"DONE": 1}, {"TESTING": 4}] !!!!!!!!!
-[]
-[{"IN_PROGRESS": 2}, {"NEW": 3, "TESTING": 4}]
-{"NEW": 3, "IN_PROGRESS": 2, "TESTING": 4, "DONE": 1}
-[{"IN_PROGRESS": 3, "TESTING": 1}, {"IN_PROGRESS": 1, "TESTING": 4}]
-{"IN_PROGRESS": 4, "TESTING": 5, "DONE": 1}
-
-     */
-std::tuple<TasksInfo, TasksInfo> TeamTasks::PerformPersonTasks (const std::string &person, int task_count) {
-    TasksInfo updated_tasks, untouched_tasks;
     TasksInfo &person_tasks = _tasks[person];
-    for (auto &[task, counter]: person_tasks) {
-        if (task_count == 0) {
-            untouched_tasks[task] = counter;
-            continue;
-        }
+    auto updated_tasks = getUpdatedTasks (person_tasks, tasks_to_perform);
+    auto untouched_tasks = getUntouchedTasks (person_tasks, updated_tasks);
 
-        if (task_count >= counter) {
-            updated_tasks[static_cast<TaskStatus>(static_cast<int>(task) + 1)] = counter;
-            task_count -= counter;
-            counter = 0;
-        } else {
-            updated_tasks[static_cast<TaskStatus>(static_cast<int>(task) + 1)] = task_count;
-            untouched_tasks[task] = counter - task_count;
-            task_count = 0;
-        }
-    }
-
-    for (auto task = TaskStatus::NEW;
-         task != TaskStatus::DONE; task = static_cast<TaskStatus>(static_cast<int>(task) + 1)) {
-        _tasks[person][task] = updated_tasks[task] + untouched_tasks[task];
-
-    }
-
-    _tasks[person][TaskStatus::DONE] += updated_tasks[TaskStatus::DONE];
-    //TODO: remove this line after fixing the bug
-    std::cout << "_tasks[person][TaskStatus::DONE  ::  ]" << _tasks[person][TaskStatus::DONE] <<
-              ", updated_tasks[TaskStatus::DONE]  ::  " << updated_tasks[TaskStatus::DONE] << std::endl;
-
-    //clear empty tasks in updated_tasks
-    for (auto it = updated_tasks.begin (); it != updated_tasks.end ();) {
-        if (it->second == 0) {
-            it = updated_tasks.erase (it);
-        } else {
-            ++it;
-        }
-    }
-
-    //clear empty tasks in untouched_tasks
-    untouched_tasks.erase (TaskStatus::DONE);
-    for (auto it = untouched_tasks.begin (); it != untouched_tasks.end ();) {
-        if (it->second == 0) {
-            it = untouched_tasks.erase (it);
-        } else {
-            ++it;
-        }
-    }
+    _clearTasks (updated_tasks);
+    _clearTasks (untouched_tasks);
+    _clearTasks (person_tasks);
 
 
     return {updated_tasks, untouched_tasks};
 }
+
+
+
+
+
+

@@ -42,4 +42,4 @@ target_link_libraries(hw_TeamTasks_RUN
         )
 
 # Tests
-#add_subdirectory(tests)
+add_subdirectory(tests)
