@@ -37,7 +37,15 @@ public:
     std::tuple<TasksInfo, TasksInfo> PerformPersonTasks (const std::string &person, int task_count);
 
 private:
+    TaskStatus _nextStatus (TaskStatus status) const;
+
     std::map<std::string, TasksInfo> _tasks;
+
+    TasksInfo getUpdatedTasks (TasksInfo &person_tasks, int task_count);
+
+    TasksInfo getUntouchedTasks (TasksInfo &person_tasks, TasksInfo &updated_tasks);
+
+    void _clearTasks (TasksInfo &tasks);
 
 };
 

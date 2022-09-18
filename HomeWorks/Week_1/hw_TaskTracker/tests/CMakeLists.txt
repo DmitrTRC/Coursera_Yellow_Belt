@@ -3,17 +3,17 @@ enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 include_directories(${HW_x_x_Lib_SOURCE_DIR}/include/)
-message(STATUS "HW_x_x_Lib Source DIR : ${HW_x_x_Lib_SOURCE_DIR}")
+message(STATUS "hw_TeamTasks_Lib Source DIR : ${hw_TeamTasks_Lib_SOURCE_DIR}")
 
 
-add_executable(HW_x_x_Tests_run
-        xxxx_test.cpp
+add_executable(hw_TeamTasks_Tests_run
+        tracker_test.cpp
         )
 
-target_link_libraries(HW_x_x_Tests_run
+target_link_libraries(hw_TeamTasks_Tests_run
         gtest_main
-        xxxx::lib
+        team_tasks::lib
         )
 
 include(GoogleTest)
-gtest_discover_tests(HW_x_x_Tests_run)
+gtest_discover_tests(hw_TeamTasks_Tests_run)
