@@ -5,22 +5,25 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include <tuple>
 
-
-// Предварительное объявление шаблонных функций
-template<typename T>
-T FuncA (T x);
 
 template<typename T>
-void FuncB (T x);
+T Sqr (T x);
 
+template<typename T>
+std::vector<T> Sqr (const std::vector<T> &x);
+
+template<typename Key, typename Value>
+std::map<Key, Value> Sqr (const std::map<Key, Value> &x);
+
+template<typename First, typename Second>
+std::pair<First, Second> Sqr (const std::pair<First, Second> &x);
 
 int main () {
-    // Пример вызова функции
+
     std::vector<int> v = {1, 2, 3};
     std::cout << "vector:";
-    for (int x : Sqr(v)) {
+    for (int x: Sqr (v)) {
         std::cout << ' ' << x;
     }
     std::cout << std::endl;
@@ -30,15 +33,36 @@ int main () {
             {7, {4, 3}}
     };
     std::cout << "map of pairs:" << std::endl;
-    for (const auto& x : Sqr(map_of_pairs)) {
-        std::cout << x.first << ' ' << x.second.first << ' ' << x.second.second << endl;
+    for (const auto &x: Sqr (map_of_pairs)) {
+        std::cout << x.first << ' ' << x.second.first << ' ' << x.second.second << std::endl;
     }
     return 0;
 }
 
-// Объявляем шаблонные функции
 template<typename T>
-T FuncA (T x) { /*...*/ }
+T Sqr (T x) {
+    return x * x;
+}
 
 template<typename T>
-void FuncB (T x) { /*...*/ }
+std::vector<T> Sqr (const std::vector<T> &x) {
+    std::vector<T> result;
+    for (const auto &item: x) {
+        result.push_back (Sqr (item));
+    }
+    return result;
+}
+
+template<typename Key, typename Value>
+std::map<Key, Value> Sqr (const std::map<Key, Value> &x) {
+    std::map<Key, Value> result;
+    for (const auto &[key, value]: x) {
+        result[key] = Sqr (value);
+    }
+    return result;
+}
+
+template<typename First, typename Second>
+std::pair<First, Second> Sqr (const std::pair<First, Second> &x) {
+    return {Sqr (x.first), Sqr (x.second)};
+}
