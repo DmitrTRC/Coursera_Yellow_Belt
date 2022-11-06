@@ -76,7 +76,28 @@ struct Query {
     vector<string> stops;
 };
 
-istream &operator>> (istream &is, Query &q) {
+istream &operator>>(istream &is, Query &q) {
+
+    string query_type;
+    is >> query_type;
+    if (query_type == "NEW_BUS") {
+        q.type = QueryType::NewBus;
+        is >> q.bus;
+        int stop_count;
+        is >> stop_count;
+        q.stops.resize(stop_count);
+        for (string &stop: q.stops) {
+            is >> stop;
+        }
+    } else if (query_type == "BUSES_FOR_STOP") {
+        q.type = QueryType::BusesForStop;
+        is >> q.stop;
+    } else if (query_type == "STOPS_FOR_BUS") {
+        q.type = QueryType::StopsForBus;
+        is >> q.bus;
+    } else if (query_type == "ALL_BUSES") {
+        q.type = QueryType::AllBuses;
+    }
 
     return is;
 }
@@ -86,7 +107,7 @@ struct BusesForStopResponse {
 
 };
 
-ostream &operator<< (ostream &os, const BusesForStopResponse &r) {
+ostream &operator<<(ostream &os, const BusesForStopResponse &r) {
     // implementation
     return os;
 }
@@ -95,7 +116,7 @@ struct StopsForBusResponse {
     // add necessary fields
 };
 
-ostream &operator<< (ostream &os, const StopsForBusResponse &r) {
+ostream &operator<<(ostream &os, const StopsForBusResponse &r) {
     // implementation
     return os;
 }
@@ -104,57 +125,72 @@ struct AllBusesResponse {
     // add necessary fields
 };
 
-ostream &operator<< (ostream &os, const AllBusesResponse &r) {
+ostream &operator<<(ostream &os, const AllBusesResponse &r) {
     // implementation
     return os;
 }
 
 class BusManager {
+
 public:
-    void AddBus (const string &bus, const vector<string> &stops) {
+
+    void AddBus(const string &bus, const vector<string> &stops) {
+
+        for (const auto &stop: stops) {
+            buses_to_stops[bus].push_back(stop);
+            stops_to_buses[stop].push_back(bus);
+        }
+
 
     }
+
+
+    BusesForStopResponse GetBusesForStop(const string &stop) const {
+        // implementation
+    }
+
+    StopsForBusResponse GetStopsForBus(const string &bus) const {}
     // implementation
 
-    BusesForStopResponse GetBusesForStop (const string &stop) const {
+    AllBusesResponse GetAllBuses() const {
         // implementation
     }
 
-    StopsForBusResponse GetStopsForBus (const string &bus) const {
-        // implementation
+private:
 
-        AllBusesResponse GetAllBuses () const {
-            // implementation
-        }
-    };
+    map<string, vector<string>> buses_to_stops, stops_to_buses;
+
+};
+
 
 // Con not be changed
-    int main () {
-        int query_count;
-        Query q;
+int main() {
 
-        cin >> query_count;
+    int query_count;
+    Query q;
 
-        BusManager bm;
+    cin >> query_count;
 
-        for (int i = 0; i < query_count; ++i) {
-            cin >> q;
+    BusManager bm;
 
-            switch (q.type) {
-                case QueryType::NewBus:
-                    bm.AddBus (q.bus, q.stops);
-                    break;
-                case QueryType::BusesForStop:
-                    cout << bm.GetBusesForStop (q.stop) << endl;
-                    break;
-                case QueryType::StopsForBus:
-                    cout << bm.GetStopsForBus (q.bus) << endl;
-                    break;
-                case QueryType::AllBuses:
-                    cout << bm.GetAllBuses () << endl;
-                    break;
-            }
+    for (int i = 0; i < query_count; ++i) {
+        cin >> q;
+
+        switch (q.type) {
+            case QueryType::NewBus:
+                bm.AddBus(q.bus, q.stops);
+                break;
+            case QueryType::BusesForStop:
+                cout << bm.GetBusesForStop(q.stop) << endl;
+                break;
+            case QueryType::StopsForBus:
+                cout << bm.GetStopsForBus(q.bus) << endl;
+                break;
+            case QueryType::AllBuses:
+                cout << bm.GetAllBuses() << endl;
+                break;
         }
-
-        return 0;
     }
+
+    return 0;
+}
