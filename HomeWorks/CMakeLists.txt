@@ -1,1 +1,2 @@
 add_subdirectory(Week_1)
+add_subdirectory(Week_2)
