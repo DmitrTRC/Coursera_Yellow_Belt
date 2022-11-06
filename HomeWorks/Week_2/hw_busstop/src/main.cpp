@@ -105,30 +105,74 @@ istream &operator>>(istream &is, Query &q) {
 
 struct BusesForStopResponse {
 
+    vector<string> buses;
 };
 
+
 ostream &operator<<(ostream &os, const BusesForStopResponse &r) {
-    // implementation
+
+    if (r.buses.empty()) {
+        os << "No stop";
+    } else {
+        for (const string &bus: r.buses) {
+            os << bus << " ";
+        }
+    }
+
     return os;
 }
 
 struct StopsForBusResponse {
-    // add necessary fields
+
+    string bus;
+    vector<pair<string, vector<string>>> stops;
+
 };
 
+
 ostream &operator<<(ostream &os, const StopsForBusResponse &r) {
-    // implementation
+
+    if (r.stops.empty()) {
+        os << "No bus";
+    } else {
+        for (const auto &stop: r.stops) {
+            os << "Stop " << stop.first << ": ";
+            if (stop.second.empty()) {
+                os << "no interchange";
+            } else {
+                for (const string &bus: stop.second) {
+                    os << bus << " ";
+                }
+            }
+            os << endl;
+        }
+    }
+
     return os;
 }
 
 struct AllBusesResponse {
-    // add necessary fields
+
+    map<string, vector<string>> buses;
 };
 
 ostream &operator<<(ostream &os, const AllBusesResponse &r) {
-    // implementation
+
+    if (r.buses.empty()) {
+        os << "No buses";
+    } else {
+        for (const auto &bus_item: r.buses) {
+            os << "Bus " << bus_item.first << ": ";
+            for (const string &stop: bus_item.second) {
+                os << stop << " ";
+            }
+            os << endl;
+        }
+    }
+
     return os;
 }
+
 
 class BusManager {
 
@@ -141,19 +185,38 @@ public:
             stops_to_buses[stop].push_back(bus);
         }
 
-
     }
 
 
-    BusesForStopResponse GetBusesForStop(const string &stop) const {
-        // implementation
+    [[nodiscard]] BusesForStopResponse GetBusesForStop(const string &stop) const {
+
+        BusesForStopResponse response;
+        if (stops_to_buses.count(stop) > 0) {
+            response.buses = stops_to_buses.at(stop);
+        }
+
+        return response;
     }
 
-    StopsForBusResponse GetStopsForBus(const string &bus) const {}
-    // implementation
+    [[nodiscard]] StopsForBusResponse GetStopsForBus(const string &bus) const {
 
-    AllBusesResponse GetAllBuses() const {
-        // implementation
+        StopsForBusResponse response;
+        if (buses_to_stops.count(bus) > 0) {
+            response.bus = bus;
+            for (const auto &stop: buses_to_stops.at(bus)) {
+                response.stops.emplace_back(stop, stops_to_buses.at(stop));
+            }
+        }
+
+        return response;
+    }
+
+    [[nodiscard]] AllBusesResponse GetAllBuses() const {
+
+        AllBusesResponse response;
+        response.buses = buses_to_stops;
+
+        return response;
     }
 
 private:
