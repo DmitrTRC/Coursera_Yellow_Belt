@@ -142,22 +142,12 @@ int GetDistinctRealRootCount(double a, double b, double c) {
 
 void Test_getDiscriminant() {
 
-    AssertEqual(getDiscriminant(1, 2, 1), 0, "getDiscriminant(1, 2, 1)");
-    AssertEqual(getDiscriminant(1, 2, 2), -12, "getDiscriminant(1, 2, 2)");
-    AssertEqual(getDiscriminant(1, 2, 3), -8, "getDiscriminant(1, 2, 3)");
-    AssertEqual(getDiscriminant(1, 2, 4), -12, "getDiscriminant(1, 2, 4)");
-    AssertEqual(getDiscriminant(1, 2, 5), 0, "getDiscriminant(1, 2, 5)");
-    AssertEqual(getDiscriminant(1, 2, 6), 4, "getDiscriminant(1, 2, 6)");
-    AssertEqual(getDiscriminant(1, 2, 7), 12, "getDiscriminant(1, 2, 7)");
-    AssertEqual(getDiscriminant(1, 2, 8), 20, "getDiscriminant(1, 2, 8)");
-    AssertEqual(getDiscriminant(1, 2, 9), 28, "getDiscriminant(1, 2, 9)");
-    AssertEqual(getDiscriminant(1, 2, 10), 36, "getDiscriminant(1, 2, 10)");
-    AssertEqual(getDiscriminant(1, 2, 11), 44, "getDiscriminant(1, 2, 11)");
-    AssertEqual(getDiscriminant(1, 2, 12), 52, "getDiscriminant(1, 2, 12)");
-    AssertEqual(getDiscriminant(1, 2, 13), 60, "getDiscriminant(1, 2, 13)");
-    AssertEqual(getDiscriminant(1, 2, 14), 68, "getDiscriminant(1, 2, 14)");
-    AssertEqual(getDiscriminant(1, 2, 15), 76, "getDiscriminant(1, 2, 15)");
-    AssertEqual(get
+    AssertEqual(getDiscriminant(1, 2, 1), 0, "1, 2, 1");
+    AssertEqual(getDiscriminant(1, 2, 2), -4, "1, 2, 2");
+    AssertEqual(getDiscriminant(1, 2, 3), -8, "1, 2, 3");
+    AssertEqual(getDiscriminant(1, 2, 4), -12, "1, 2, 4");
+    AssertEqual(getDiscriminant(1, 0, 0), 0, "1, 0, 0");
+    AssertEqual(getDiscriminant(1, 1, 1), -3, "1, 1, 1");
 
 }
 
@@ -171,10 +161,10 @@ void Test_getLinearCount() {
 
 void Test_getRootCount() {
 
-    AssertEqual(getRootCount(1, 0, 0), 2, "a = 1, b = 0, c = 0");
-    AssertEqual(getRootCount(1, 0, 1), 0, "a = 1, b = 0, c = 1");
-    AssertEqual(getRootCount(1, 1, 0), 1, "a = 1, b = 1, c = 0");
-    AssertEqual(getRootCount(1, 1, 1), 0, "a = 1, b = 1, c = 1");
+    AssertEqual(getRootCount(1, 0, 0), 1, "1, 0, 0");
+    AssertEqual(getRootCount(1, 0, 1), 0, "1, 0, 1");
+    AssertEqual(getRootCount(1, 1, 0), 2, "1, 1, 0");
+    AssertEqual(getRootCount(1, 1, 1), 0, "1, 1, 1");
 }
 
 void Test_GetDistinctRealRootCount() {
@@ -201,6 +191,7 @@ void TestAll() {
 
 
 int main() {
+
     TestAll();
 
     return 0;
