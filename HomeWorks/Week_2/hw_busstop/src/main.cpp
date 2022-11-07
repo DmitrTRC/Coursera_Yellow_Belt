@@ -36,7 +36,7 @@ Input:
 10
 ALL_BUSES
 BUSES_FOR_STOP Marushkino
-
+STOPS_FOR_BUS 32K
 NEW_BUS 32 3 Tolstopaltsevo Marushkino Vnukovo
 NEW_BUS 32K 6 Tolstopaltsevo Marushkino Vnukovo Peredelkino Solntsevo Skolkovo
 BUSES_FOR_STOP Vnukovo
@@ -137,11 +137,14 @@ ostream &operator<<(ostream &os, const StopsForBusResponse &r) {
     } else {
         for (const auto &stop: r.stops) {
             os << "Stop " << stop.first << ": ";
-            if (stop.second.empty()) {
+            if (stop.second.size() == 1) {
                 os << "no interchange";
             } else {
                 for (const string &bus: stop.second) {
-                    os << bus << " ";
+                    if (bus != r.bus) {
+                        os << bus << " ";
+                    }
+
                 }
             }
             os << endl;

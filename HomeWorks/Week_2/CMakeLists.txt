@@ -1,1 +1,2 @@
 add_subdirectory(hw_busstop)
+add_subdirectory(hw_test_rootEquation)
