@@ -104,15 +104,104 @@ private:
     int fail_count = 0;
 };
 
-int GetDistinctRealRootCount(double a, double b, double c) {
-    // Ð’Ñ‹ Ð¼Ð¾Ð¶ÐµÑ‚Ðµ Ð²ÑÑ‚Ð°Ð²Ð»ÑÑ‚ÑŒ ÑÑŽÐ´Ð° Ñ€Ð°Ð·Ð»Ð¸Ñ‡Ð½Ñ‹Ðµ Ñ€ÐµÐ°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ð¸ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸,
-    // Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¿Ñ€Ð¾Ð²ÐµÑ€Ð¸Ñ‚ÑŒ, Ñ‡Ñ‚Ð¾ Ð²Ð°ÑˆÐ¸ Ñ‚ÐµÑÑ‚Ñ‹ Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°ÑŽÑ‚ ÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ñ‹Ð¹ ÐºÐ¾Ð´
-    // Ð¸ Ð»Ð¾Ð²ÑÑ‚ Ð½ÐµÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ñ‹Ð¹
+double getDiscriminant(double a, double b, double c) {
+
+    return b * b - 4 * a * c;
 }
 
-int main() {
+int getLinearCount(double b, double c) {
+
+    if (b == 0) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+int getRootCount(double a, double b, double c) {
+
+    double discriminant = getDiscriminant(a, b, c);
+    if (discriminant < 0) {
+        return 0;
+    } else if (discriminant == 0) {
+        return 1;
+    } else {
+        return 2;
+    }
+}
+
+int GetDistinctRealRootCount(double a, double b, double c) {
+
+    if (a == 0) {
+        return getLinearCount(b, c);
+    } else {
+        return getRootCount(a, b, c);
+    }
+
+}
+
+void Test_getDiscriminant() {
+
+    AssertEqual(getDiscriminant(1, 2, 1), 0, "getDiscriminant(1, 2, 1)");
+    AssertEqual(getDiscriminant(1, 2, 2), -12, "getDiscriminant(1, 2, 2)");
+    AssertEqual(getDiscriminant(1, 2, 3), -8, "getDiscriminant(1, 2, 3)");
+    AssertEqual(getDiscriminant(1, 2, 4), -12, "getDiscriminant(1, 2, 4)");
+    AssertEqual(getDiscriminant(1, 2, 5), 0, "getDiscriminant(1, 2, 5)");
+    AssertEqual(getDiscriminant(1, 2, 6), 4, "getDiscriminant(1, 2, 6)");
+    AssertEqual(getDiscriminant(1, 2, 7), 12, "getDiscriminant(1, 2, 7)");
+    AssertEqual(getDiscriminant(1, 2, 8), 20, "getDiscriminant(1, 2, 8)");
+    AssertEqual(getDiscriminant(1, 2, 9), 28, "getDiscriminant(1, 2, 9)");
+    AssertEqual(getDiscriminant(1, 2, 10), 36, "getDiscriminant(1, 2, 10)");
+    AssertEqual(getDiscriminant(1, 2, 11), 44, "getDiscriminant(1, 2, 11)");
+    AssertEqual(getDiscriminant(1, 2, 12), 52, "getDiscriminant(1, 2, 12)");
+    AssertEqual(getDiscriminant(1, 2, 13), 60, "getDiscriminant(1, 2, 13)");
+    AssertEqual(getDiscriminant(1, 2, 14), 68, "getDiscriminant(1, 2, 14)");
+    AssertEqual(getDiscriminant(1, 2, 15), 76, "getDiscriminant(1, 2, 15)");
+    AssertEqual(get
+
+}
+
+void Test_getLinearCount() {
+
+    AssertEqual(getLinearCount(0, 0), 0, "b = 0, c = 0");
+    AssertEqual(getLinearCount(0, 1), 0, "b = 0, c = 1");
+    AssertEqual(getLinearCount(1, 0), 1, "b = 1, c = 0");
+    AssertEqual(getLinearCount(1, 1), 1, "b = 1, c = 1");
+}
+
+void Test_getRootCount() {
+
+    AssertEqual(getRootCount(1, 0, 0), 2, "a = 1, b = 0, c = 0");
+    AssertEqual(getRootCount(1, 0, 1), 0, "a = 1, b = 0, c = 1");
+    AssertEqual(getRootCount(1, 1, 0), 1, "a = 1, b = 1, c = 0");
+    AssertEqual(getRootCount(1, 1, 1), 0, "a = 1, b = 1, c = 1");
+}
+
+void Test_GetDistinctRealRootCount() {
+
+    AssertEqual(GetDistinctRealRootCount(0, 0, 0), 0, "a = 0, b = 0, c = 0");
+    AssertEqual(GetDistinctRealRootCount(0, 0, 1), 0, "a = 0, b = 0, c = 1");
+    AssertEqual(GetDistinctRealRootCount(0, 1, 0), 1, "a = 0, b = 1, c = 0");
+    AssertEqual(GetDistinctRealRootCount(0, 1, 1), 1, "a = 0, b = 1, c = 1");
+    AssertEqual(GetDistinctRealRootCount(1, 0, 0), 2, "a = 1, b = 0, c = 0");
+    AssertEqual(GetDistinctRealRootCount(1, 0, 1), 0, "a = 1, b = 0, c = 1");
+    AssertEqual(GetDistinctRealRootCount(1, 1, 0), 1, "a = 1, b = 1, c = 0");
+    AssertEqual(GetDistinctRealRootCount(1, 1, 1), 0, "a = 1, b = 1, c = 1");
+}
+
+void TestAll() {
 
     TestRunner runner;
-    // Ð´Ð¾Ð±Ð°Ð²ÑŒÑ‚Ðµ ÑÑŽÐ´Ð° ÑÐ²Ð¾Ð¸ Ñ‚ÐµÑÑ‚Ñ‹
+    runner.RunTest(Test_getDiscriminant, "Test_getDiscriminant");
+    runner.RunTest(Test_getLinearCount, "Test_getLinearCount");
+    runner.RunTest(Test_getRootCount, "Test_getRootCount");
+
+
+}
+
+
+int main() {
+    TestAll();
+
     return 0;
 }
