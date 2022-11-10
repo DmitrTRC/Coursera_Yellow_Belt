@@ -109,36 +109,55 @@ double getDiscriminant(double a, double b, double c) {
     return b * b - 4 * a * c;
 }
 
-int getLinearCount(double b, double c) {
+//Correct implementation wasn't accepted by tests: Test_getDiscriminant OK
+//Test_GetDistinctRealRootCount fail: Assertion failed: 0 != 3 hint: 0, 0, 0
+//1 unit tests failed. Terminate
+// (Time used: 0.00/1.00, preprocess time used: 0/None, memory used: 12025856/536870912.)
 
-    if (b == 0) {
-        return 0;
-    } else {
-        return 1;
-    }
-}
 
-int getRootCount(double a, double b, double c) {
+int GetDistinctRealRootCount(double a, double b, double c){
 
-    double discriminant = getDiscriminant(a, b, c);
-    if (discriminant < 0) {
-        return 0;
-    } else if (discriminant == 0) {
-        return 1;
-    } else {
-        return 2;
-    }
-}
+        if (a == 0) {
 
-int GetDistinctRealRootCount(double a, double b, double c) {
+            if (b == 0) {
 
-    if (a == 0) {
-        return getLinearCount(b, c);
-    } else {
-        return getRootCount(a, b, c);
-    }
+                if (c == 0) {
 
-}
+                    return 0;
+
+                } else {
+
+                    return 0;
+
+                }
+
+            } else {
+
+                return 1;
+
+            }
+
+        } else {
+
+            double discriminant = getDiscriminant(a, b, c);
+
+            if (discriminant > 0) {
+
+                return 2;
+
+            } else if (discriminant == 0) {
+
+                return 1;
+
+            } else {
+
+                return 0;
+
+            }
+
+        }
+
+};
 
 void Test_getDiscriminant() {
 
@@ -151,42 +170,58 @@ void Test_getDiscriminant() {
 
 }
 
-void Test_getLinearCount() {
 
-    AssertEqual(getLinearCount(0, 0), 0, "b = 0, c = 0");
-    AssertEqual(getLinearCount(0, 1), 0, "b = 0, c = 1");
-    AssertEqual(getLinearCount(1, 0), 1, "b = 1, c = 0");
-    AssertEqual(getLinearCount(1, 1), 1, "b = 1, c = 1");
-}
 
-void Test_getRootCount() {
 
-    AssertEqual(getRootCount(1, 0, 0), 1, "1, 0, 0");
-    AssertEqual(getRootCount(1, 0, 1), 0, "1, 0, 1");
-    AssertEqual(getRootCount(1, 1, 0), 2, "1, 1, 0");
-    AssertEqual(getRootCount(1, 1, 1), 0, "1, 1, 1");
-}
 
 void Test_GetDistinctRealRootCount() {
 
-    AssertEqual(GetDistinctRealRootCount(0, 0, 0), 0, "a = 0, b = 0, c = 0");
-    AssertEqual(GetDistinctRealRootCount(0, 0, 1), 0, "a = 0, b = 0, c = 1");
-    AssertEqual(GetDistinctRealRootCount(0, 1, 0), 1, "a = 0, b = 1, c = 0");
-    AssertEqual(GetDistinctRealRootCount(0, 1, 1), 1, "a = 0, b = 1, c = 1");
-    AssertEqual(GetDistinctRealRootCount(1, 0, 0), 2, "a = 1, b = 0, c = 0");
-    AssertEqual(GetDistinctRealRootCount(1, 0, 1), 0, "a = 1, b = 0, c = 1");
-    AssertEqual(GetDistinctRealRootCount(1, 1, 0), 1, "a = 1, b = 1, c = 0");
-    AssertEqual(GetDistinctRealRootCount(1, 1, 1), 0, "a = 1, b = 1, c = 1");
+        AssertEqual(GetDistinctRealRootCount(1, 2, 1), 1, "1, 2, 1");
+        AssertEqual(GetDistinctRealRootCount(1, 2, 2), 0, "1, 2, 2");
+        AssertEqual(GetDistinctRealRootCount(1, 2, 3), 0, "1, 2, 3");
+        AssertEqual(GetDistinctRealRootCount(1, 2, 4), 0, "1, 2, 4");
+        AssertEqual(GetDistinctRealRootCount(1, 0, 0), 1, "1, 0, 0");
+        AssertEqual(GetDistinctRealRootCount(1, 1, 1), 0, "1, 1, 1");
+        AssertEqual(GetDistinctRealRootCount(0, 1, 1), 1, "0, 1, 1");
+        AssertEqual(GetDistinctRealRootCount(0, 0, 1), 0, "0, 0, 1");
+        AssertEqual(GetDistinctRealRootCount(0, 0, 0), 0, "0, 0, 0");
+        AssertEqual(GetDistinctRealRootCount(0, 1, 0), 1, "0, 1, 0");
+        AssertEqual(GetDistinctRealRootCount(0, 1, 2), 1, "0, 1, 2");
+        AssertEqual(GetDistinctRealRootCount(0, 1, 3), 1, "0, 1, 3");
+        AssertEqual(GetDistinctRealRootCount(0, 1, 4), 1, "0, 1, 4");
+        AssertEqual(GetDistinctRealRootCount(0, 2, 1), 1, "0, 2, 1");
+        AssertEqual(GetDistinctRealRootCount(0, 2, 2), 1, "0, 2, 2");
+        AssertEqual(GetDistinctRealRootCount(0, 2, 3), 1, "0, 2, 3");
+        AssertEqual(GetDistinctRealRootCount(0, 2, 4), 1, "0, 2, 4");
+
+        //Test for doubles
+
+        AssertEqual(GetDistinctRealRootCount(1.0, 2.0, 1.0), 1, "1.0, 2.0, 1.0");
+        AssertEqual(GetDistinctRealRootCount(1.0, 2.0, 2.0), 0, "1.0, 2.0, 2.0");
+        AssertEqual(GetDistinctRealRootCount(1.0, 2.0, 3.0), 0, "1.0, 2.0, 3.0");
+        AssertEqual(GetDistinctRealRootCount(1.0, 2.0, 4.0), 0, "1.0, 2.0, 4.0");
+        AssertEqual(GetDistinctRealRootCount(1.0, 0.0, 0.0), 1, "1.0, 0.0, 0.0");
+        AssertEqual(GetDistinctRealRootCount(1.0, 1.0, 1.0), 0, "1.0, 1.0, 1.0");
+        AssertEqual(GetDistinctRealRootCount(0.0, 1.0, 1.0), 1, "0.0, 1.0, 1.0");
+        AssertEqual(GetDistinctRealRootCount(0.0, 0.0, 1.0), 0, "0.0, 0.0, 1.0");
+        AssertEqual(GetDistinctRealRootCount(0.0, 0.0, 0.0), 0, "0.0, 0.0, 0.0");
+        AssertEqual(GetDistinctRealRootCount(0.0, 1.0, 0.0), 1, "0.0, 1.0, 0.0");
+        AssertEqual(GetDistinctRealRootCount(0.0, 1.0, 2.0), 1, "0.0, 1.0, 2.0");
+        AssertEqual(GetDistinctRealRootCount(0.0, 1.0, 3.0), 1, "0.0, 1.0, 3.0");
+        AssertEqual(GetDistinctRealRootCount(0.0, 1.0, 4.0), 1, "0.0, 1.0, 4.0");
+        AssertEqual(GetDistinctRealRootCount(0.0, 2.0, 1.0), 1, "0.0, 2.0, 1.0");
+        AssertEqual(GetDistinctRealRootCount(0.0, 2.0, 2.0), 1, "0.0, 2.0, 2.0");
+        AssertEqual(GetDistinctRealRootCount(0.0, 2.0, 3.0), 1, "0.0, 2.0, 3.0");
+        AssertEqual(GetDistinctRealRootCount(0.0, 2.0, 4.0), 1, "0.0, 2.0, 4.0");
+
+
 }
 
 void TestAll() {
 
     TestRunner runner;
     runner.RunTest(Test_getDiscriminant, "Test_getDiscriminant");
-    runner.RunTest(Test_getLinearCount, "Test_getLinearCount");
-    runner.RunTest(Test_getRootCount, "Test_getRootCount");
-
-
+    runner.RunTest(Test_GetDistinctRealRootCount, "Test_GetDistinctRealRootCount");
 }
 
 
