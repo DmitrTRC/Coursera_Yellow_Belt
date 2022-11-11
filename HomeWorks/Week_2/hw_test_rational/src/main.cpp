@@ -100,64 +100,49 @@ private:
     int fail_count = 0;
 };
 
-//class Rational {
-//public:
-//
-//    Rational() : Rational(0, 1) {};
-//
-//    Rational(int numerator, int denominator) {
-//
-//        if (denominator == 0) {
-//            throw invalid_argument("Invalid argument");
-//        }
-//
-//        if (numerator == 0) {
-//            _numerator = 0;
-//            _denominator = 1;
-//        } else {
-//            int gcd = GCD(numerator, denominator);
-//            _numerator = numerator / gcd;
-//            _denominator = denominator / gcd;
-//            if (_denominator < 0) {
-//                _numerator *= -1;
-//                _denominator *= -1;
-//            }
-//        }
-//    }
-//
-//    int Numerator() const {
-//
-//        return _numerator;
-//    }
-//
-//    int Denominator() const {
-//
-//        return _denominator;
-//    }
-//
-//private:
-//    int _numerator;
-//    int _denominator;
-////GCD for whole integers range
-//    int GCD(int a, int b) {
-//
-//        if (a < 0) {
-//            a *= -1;
-//        }
-//        if (b < 0) {
-//            b *= -1;
-//        }
-//        while (a > 0 && b > 0) {
-//            if (a > b) {
-//                a %= b;
-//            } else {
-//                b %= a;
-//            }
-//        }
-//        return a + b;
-//
-//    }
-//};
+int GreatestCommonDivisor(int a, int b) {
+
+    if (b == 0) {
+        return a;
+    } else {
+        return GreatestCommonDivisor(b, a % b);
+    }
+}
+
+class Rational {
+public:
+    Rational() {  // дробь по умолчанию — 0/1
+        numerator = 0;
+        denominator = 1;
+    }
+
+    Rational(int new_numerator, int new_denominator) {
+
+        const int gcd = GreatestCommonDivisor(new_numerator, new_denominator);
+        // сократим дробь, разделив числитель и знаменатель на их НОД
+        numerator = new_numerator / gcd;
+        denominator = new_denominator / gcd;
+        // знаменатель должен быть положительным
+        if (denominator < 0) {
+            denominator = -denominator;
+            numerator = -numerator;
+        }
+    }
+
+    int Numerator() const {
+
+        return numerator;
+    }
+
+    int Denominator() const {
+
+        return denominator;
+    }
+
+private:
+    int numerator;
+    int denominator;
+};
 
 void TestDefaultConstructor() {
 
@@ -177,6 +162,8 @@ void TestConstructor() {
     AssertEqual(Rational(-1, 2).Denominator(), 2, "6");
     AssertEqual(Rational(-1, -2).Numerator(), 1, "7");
     AssertEqual(Rational(-1, -2).Denominator(), 2, "8");
+    AssertEqual(Rational(-2, -3).Numerator(), 2, "9");
+    AssertEqual(Rational(-2, -3).Denominator(), 3, "10");
 
 }
 
@@ -185,6 +172,11 @@ void TestZeroNumerator() {
     Rational r(0, 2);
     AssertEqual(r.Numerator(), 0);
     AssertEqual(r.Denominator(), 1);
+
+    Rational r1(0, 0);
+    AssertEqual(r1.Numerator(), 0);
+    AssertEqual(r1.Denominator(), 1);
+
 }
 
 
