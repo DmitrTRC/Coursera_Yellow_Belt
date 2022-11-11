@@ -100,57 +100,64 @@ private:
     int fail_count = 0;
 };
 
-class Rational {
-public:
-
-    Rational() : Rational(0, 1) {};
-
-    Rational(int numerator, int denominator) {
-
-        if (denominator == 0) {
-            throw invalid_argument("Invalid argument");
-        }
-
-        if (numerator == 0) {
-            _numerator = 0;
-            _denominator = 1;
-        } else {
-            int gcd = GCD(numerator, denominator);
-            _numerator = numerator / gcd;
-            _denominator = denominator / gcd;
-            if (_denominator < 0) {
-                _numerator *= -1;
-                _denominator *= -1;
-            }
-        }
-    }
-
-    int Numerator() const {
-
-        return _numerator;
-    }
-
-    int Denominator() const {
-
-        return _denominator;
-    }
-
-private:
-    int _numerator;
-    int _denominator;
-
-    int GCD(int a, int b) {
-
-        while (a > 0 && b > 0) {
-            if (a > b) {
-                a %= b;
-            } else {
-                b %= a;
-            }
-        }
-        return a + b;
-    }
-};
+//class Rational {
+//public:
+//
+//    Rational() : Rational(0, 1) {};
+//
+//    Rational(int numerator, int denominator) {
+//
+//        if (denominator == 0) {
+//            throw invalid_argument("Invalid argument");
+//        }
+//
+//        if (numerator == 0) {
+//            _numerator = 0;
+//            _denominator = 1;
+//        } else {
+//            int gcd = GCD(numerator, denominator);
+//            _numerator = numerator / gcd;
+//            _denominator = denominator / gcd;
+//            if (_denominator < 0) {
+//                _numerator *= -1;
+//                _denominator *= -1;
+//            }
+//        }
+//    }
+//
+//    int Numerator() const {
+//
+//        return _numerator;
+//    }
+//
+//    int Denominator() const {
+//
+//        return _denominator;
+//    }
+//
+//private:
+//    int _numerator;
+//    int _denominator;
+////GCD for whole integers range
+//    int GCD(int a, int b) {
+//
+//        if (a < 0) {
+//            a *= -1;
+//        }
+//        if (b < 0) {
+//            b *= -1;
+//        }
+//        while (a > 0 && b > 0) {
+//            if (a > b) {
+//                a %= b;
+//            } else {
+//                b %= a;
+//            }
+//        }
+//        return a + b;
+//
+//    }
+//};
 
 void TestDefaultConstructor() {
 
