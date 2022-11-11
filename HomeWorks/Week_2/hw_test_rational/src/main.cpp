@@ -100,49 +100,58 @@ private:
     int fail_count = 0;
 };
 
-//int GreatestCommonDivisor(int a, int b) {
-//
-//    if (b == 0) {
-//        return a;
-//    } else {
-//        return GreatestCommonDivisor(b, a % b);
-//    }
-//}
-//
-//class Rational {
-//public:
-//    Rational() {  // дробь по умолчанию — 0/1
-//        numerator = 0;
-//        denominator = 1;
-//    }
-//
-//    Rational(int new_numerator, int new_denominator) {
-//
-//        const int gcd = GreatestCommonDivisor(new_numerator, new_denominator);
-//        // сократим дробь, разделив числитель и знаменатель на их НОД
-//        numerator = new_numerator / gcd;
-//        denominator = new_denominator / gcd;
-//        // знаменатель должен быть положительным
-//        if (denominator < 0) {
-//            denominator = -denominator;
-//            numerator = -numerator;
-//        }
-//    }
-//
-//    int Numerator() const {
-//
-//        return numerator;
-//    }
-//
-//    int Denominator() const {
-//
-//        return denominator;
-//    }
-//
-//private:
-//    int numerator;
-//    int denominator;
-//};
+int GCD(int a, int b) {
+
+    if (a < 0) {
+        a = -a;
+    }
+    if (b < 0) {
+        b = -b;
+    }
+    while (a > 0 && b > 0) {
+        if (a > b) {
+            a %= b;
+        } else {
+            b %= a;
+        }
+    }
+    return a + b;
+}
+
+class Rational {
+public:
+    Rational() {  // дробь по умолчанию — 0/1
+        numerator = 0;
+        denominator = 1;
+    }
+
+    Rational(int new_numerator, int new_denominator) {
+
+        const int gcd = GCD(new_numerator, new_denominator);
+        // сократим дробь, разделив числитель и знаменатель на их НОД
+        numerator = new_numerator / gcd;
+        denominator = new_denominator / gcd;
+        // знаменатель должен быть положительным
+        if (denominator < 0) {
+            denominator = -denominator;
+            numerator = -numerator;
+        }
+    }
+
+    int Numerator() const {
+
+        return numerator;
+    }
+
+    int Denominator() const {
+
+        return denominator;
+    }
+
+private:
+    int numerator;
+    int denominator;
+};
 
 void TestDefaultConstructor() {
 
