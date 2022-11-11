@@ -2,4 +2,5 @@ add_subdirectory(hw_busstop)
 add_subdirectory(hw_test_rootEquation)
 add_subdirectory(hw_Person)
 add_subdirectory(hw_test_rational)
+add_subdirectory(hw_test_is_palindrome)
 
