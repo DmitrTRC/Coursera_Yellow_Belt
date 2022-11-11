@@ -6,25 +6,27 @@
 // Ignoring first , last symbols
 // Ignoring spaces
 // Compare stops before the middle of the string
+
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
-bool IsPalindrom(const string &s) {
-
-    if (s.empty()) {
-        return true;
-    }
-    if (s.size() == 1) {
-        return true;
-    }
-    for (int i = 0; i < s.size() / 2; i++) {
-        if (s[i] != s[s.size() - i - 1]) {
-            return false;
-        }
-    }
-    return true;
-}
+//bool IsPalindrome(const string &s) {
+//
+//    if (s.empty()) {
+//        return true;
+//    }
+//    if (s.size() == 1) {
+//        return true;
+//    }
+//    for (int i = 0; i < s.size() / 2; i++) {
+//        if (s[i] != s[s.size() - i - 1]) {
+//            return false;
+//        }
+//    }
+//    return true;
+//}
 
 #include <map>
 #include <set>
@@ -132,47 +134,206 @@ void TestAll() {
 
     TestRunner tr;
     tr.RunTest([] {
-        AssertEqual(IsPalindrom(""), true, "empty string is a palindrome");
+        AssertEqual(IsPalindrome(""), true, "empty string is a palindrome");
     }, "empty string is a palindrome");
     tr.RunTest([] {
-        AssertEqual(IsPalindrom("a"), true, "string of length 1 is a palindrome");
+        AssertEqual(IsPalindrome("a"), true, "string of length 1 is a palindrome");
     }, "string of length 1 is a palindrome");
     tr.RunTest([] {
-        AssertEqual(IsPalindrom("ab"), false, "string of length 2 is not a palindrome");
+        AssertEqual(IsPalindrome("ab"), false, "string of length 2 is not a palindrome");
     }, "string of length 2 is not a palindrome");
     tr.RunTest([] {
-        AssertEqual(IsPalindrom("aba"), true, "string of length 3 is a palindrome");
+        AssertEqual(IsPalindrome("aba"), true, "string of length 3 is a palindrome");
     }, "string of length 3 is a palindrome");
     tr.RunTest([] {
-        AssertEqual(IsPalindrom("abba"), true, "string of length 4 is a palindrome");
+        AssertEqual(IsPalindrome("abba"), true, "string of length 4 is a palindrome");
     }, "string of length 4 is a palindrome");
     tr.RunTest([] {
-        AssertEqual(IsPalindrom("abacaba"), true, "string of length 7 is a palindrome");
+        AssertEqual(IsPalindrome("abacaba"), true, "string of length 7 is a palindrome");
     }, "string of length 7 is a palindrome");
     tr.RunTest([] {
-        AssertEqual(IsPalindrom("abacab"), false, "string of length 6 is not a palindrome");
+        AssertEqual(IsPalindrome("abacab"), false, "string of length 6 is not a palindrome");
     }, "string of length 6 is not a palindrome");
     tr.RunTest([] {
-        AssertEqual(IsPalindrom("madam"), true, "string of length 5 is a palindrome");
+        AssertEqual(IsPalindrome("madam"), true, "string of length 5 is a palindrome");
     }, "string of length 5 is a palindrome");
     tr.RunTest([] {
-        AssertEqual(IsPalindrom("level"), true, "string of length 5 is a palindrome");
+        AssertEqual(IsPalindrome("level"), true, "string of length 5 is a palindrome");
     }, "string of length 5 is a palindrome");
     tr.RunTest([] {
-        AssertEqual(IsPalindrom("wasitacaroracatisaw"), true, "string of length 19 is a palindrome");
+        AssertEqual(IsPalindrome("wasitacaroracatisaw"), true, "string of length 19 is a palindrome");
     }, "string of length 19 is a palindrome");
 
     tr.RunTest([] {
-        AssertEqual(IsPalindrom("madam"), true, "string of length 5 is a palindrome");
+        AssertEqual(IsPalindrome("madam"), true, "string of length 5 is a palindrome");
     }, "string of length 18 is not a palindrome");
 
     tr.RunTest([] {
-        AssertEqual(IsPalindrom("wasitacaroracatisaw madam"), false, "string of length 19 is a palindrome");
+        AssertEqual(IsPalindrome("wasitacaroracatisaw madam"), false, "string of length 19 is a palindrome");
     }, "string of length 19 is not a palindrome");
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("aa"), true, "string of length 2 is a palindrome");
+    }, "string of length 2 is a palindrome");
 
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("aA"), false, "string of length 2 is not a palindrome");
+    }, "string of length 2 is not a palindrome");
+
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("ab ba"), true, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("ab  ba"), true, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("ab   ba"), true, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("ab   b a"), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("a b   b a"), true, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("a b   b a "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //Test not equal length
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("a b   b a  "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //Test not equal length
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("a b   b a   "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //Test not equal length
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("a b   b a    "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //Test not equal length
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("a b   b a     "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //Test not equal length
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("a b   b a      "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //Test not equal length
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("a b   b a       "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //Test not equal length
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("a b   b a        "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //Test not equal length
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("a b   b a         "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //Test not equal length
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("a b   b a          "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+    //Test ignoring first symbols
+
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("  a b   b a "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("   a b   b a "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("    a b                b a "), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //test special symbols
+
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./"), false,
+                    "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./ "), false,
+                    "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+        AssertEqual(IsPalindrome("1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./  "), false,
+                    "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    //Check for true special symbols
+
+    tr.RunTest([] {
+        std::string s = "1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./";
+        std::string rev_s = s;
+        std::reverse(rev_s.begin(), rev_s.end());
+        AssertEqual(IsPalindrome(rev_s), IsPalindrome(s), "string of length 5 is a palindrome");
+        s.append(rev_s);
+        AssertEqual(IsPalindrome(s), true, "string of length 5 is a palindrome");
+
+    }, "string of length 5 is a palindrome");
+
+
+
+    tr.RunTest([] {
+        std::string s = "1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./";
+        std::string rev_s = s;
+        std::reverse(rev_s.begin(), rev_s.end());
+
+        s.append(rev_s);
+        s.append(" ");
+        AssertEqual(IsPalindrome(s), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+
+        AssertEqual(IsPalindrome("aabccba"), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+
+        AssertEqual(IsPalindrome("aabccbaa"), true, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+
+        AssertEqual(IsPalindrome("aabccbaaa"), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+
+        AssertEqual(IsPalindrome("aabcccbaa"), true, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
+
+    tr.RunTest([] {
+        std::string s = "1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./";
+        std::string rev_s = s;
+        std::reverse(rev_s.begin(), rev_s.end());
+
+        s.append("XB");
+        s.append("rev_s");
+        AssertEqual(IsPalindrome(s), false, "string of length 5 is a palindrome");
+    }, "string of length 5 is a palindrome");
 
 }
-
 
 int main() {
 
