@@ -3,6 +3,7 @@
 //
 
 #include "query.h"
+#include "bus_manager.h"
 
 #include <iostream>
 
