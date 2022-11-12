@@ -2,27 +2,34 @@
 // Created by Dmitry Morozov on 12/11/22.
 //
 
+#include "query.h"
+
+#include <iostream>
+
 int main() {
+
     int query_count;
     Query q;
 
-    cin >> query_count;
+    std::cin >> query_count;
 
     BusManager bm;
+
     for (int i = 0; i < query_count; ++i) {
-        cin >> q;
+        std::cin >> q;
+
         switch (q.type) {
             case QueryType::NewBus:
                 bm.AddBus(q.bus, q.stops);
                 break;
             case QueryType::BusesForStop:
-                cout << bm.GetBusesForStop(q.stop) << endl;
+                std::cout << bm.GetBusesForStop(q.stop) << std::endl;
                 break;
             case QueryType::StopsForBus:
-                cout << bm.GetStopsForBus(q.bus) << endl;
+                std::cout << bm.GetStopsForBus(q.bus) << std::endl;
                 break;
             case QueryType::AllBuses:
-                cout << bm.GetAllBuses() << endl;
+                std::cout << bm.GetAllBuses() << std::endl;
                 break;
         }
     }
