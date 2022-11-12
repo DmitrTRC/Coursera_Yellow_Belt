@@ -30,5 +30,6 @@ struct AllBusesResponse {
     std::map<std::string, std::vector<std::string>> buses;
 };
 
+std::ostream &operator<<(std::ostream &os, const AllBusesResponse &r);
 
 #endif //COURSERA_YELLOW_BELT_MAIN_RESPONSES_H
