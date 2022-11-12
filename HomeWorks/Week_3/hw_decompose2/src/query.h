@@ -22,5 +22,6 @@ struct Query {
     std::vector<std::string> stops;
 };
 
+std::istream &operator>>(std::istream &is, Query &q);
 
 #endif //COURSERA_YELLOW_BELT_MAIN_QUERY_H

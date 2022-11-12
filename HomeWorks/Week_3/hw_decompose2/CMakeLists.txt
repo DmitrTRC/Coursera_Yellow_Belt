@@ -16,5 +16,8 @@ include_directories(.)
 add_executable(
         hw_decompose2
         src/main.cpp
+        src/query.cpp
+        src/bus_manager.cpp
+        src/responses.cpp
 )
 
