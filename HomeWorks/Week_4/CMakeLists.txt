@@ -3,4 +3,5 @@ add_subdirectory(hw_sets)
 add_subdirectory(hw_split_into_words)
 add_subdirectory(delete_repeating)
 add_subdirectory(hw_permutations)
+add_subdirectory(hw_DemographicStat)
 
