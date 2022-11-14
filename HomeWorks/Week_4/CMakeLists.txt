@@ -5,4 +5,6 @@ add_subdirectory(delete_repeating)
 add_subdirectory(hw_permutations)
 add_subdirectory(hw_DemographicStat)
 add_subdirectory(hw_merge_sort)
+add_subdirectory(hw_PersonalFinance)
+
 
