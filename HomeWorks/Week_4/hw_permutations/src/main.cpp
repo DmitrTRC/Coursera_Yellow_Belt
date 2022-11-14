@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <numeric>
 
 
 auto getPermutations(int n) {
@@ -12,9 +13,7 @@ auto getPermutations(int n) {
     std::vector<std::vector<int>> permutations;
     std::vector<int> permutation(n);
 
-    for (int i = n; i != 0; --i) {
-        permutation[n - i] = i;
-    }
+    std::iota(permutation.rbegin(), permutation.rend(), 1);
 
     do {
         permutations.push_back(permutation);
