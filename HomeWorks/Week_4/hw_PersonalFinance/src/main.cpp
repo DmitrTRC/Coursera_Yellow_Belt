@@ -18,20 +18,29 @@
 
 class Earn {
 public:
-    Earn(std::tm from, std::tm to, int value) : value_(value) {
+    Earn(std::chrono::year_month_day from, std::chrono::year_month_day to, int value) : value_(value) {
 
-        from_ = std::chrono::system_clock::from_time_t(std::mktime(&from));
-        to_ = std::chrono::system_clock::from_time_t(std::mktime(&to));
+        if (from > to) {
+            throw std::invalid_argument("from > to");
+        }
 
+        from_ = from;
+        to_ = to;
 
     }
 
 
     [[nodiscard]] int value() const { return value_; }
 
+    [[nodiscard]] std::chrono::year_month_day from() const { return from_; }
+
+    [[nodiscard]] std::chrono::year_month_day to() const { return to_; }
+
 private:
-    std::chrono::system_clock::time_point from_;
-    std::chrono::system_clock::time_point to_;
+
+    std::chrono::year_month_day from_;
+    std::chrono::year_month_day to_;
+
 
     int value_;
 };
@@ -43,7 +52,10 @@ public:
     Balance() = default;
 
     void addEarn(const Earn &earn) {
+
         earns_.push_back(earn);
+        std::cout << "Earn added" << std::endl;
+        std::cout << "Earn per day: " << getEarnPerDay(earn) << std::endl;
     }
 
 
@@ -51,13 +63,17 @@ public:
 
     }
 
+    double getEarnPerDay(const Earn &earn) {
+
+        return earn.value() / ((std::chrono::sys_days(earn.to())).time_since_epoch() -
+                               (std::chrono::sys_days(earn.from())).time_since_epoch()).count();
+
+
+    }
+
 private:
     std::vector<Earn> earns_;
 
-    double getEarnPerDay(const Earn &earn) {
-
-//        return earn.value() / getDaysBetween(earn.from(), earn.to());
-    }
 
     int getDaysBetween(const std::string &from, const std::string &to) const {
     }
@@ -65,12 +81,17 @@ private:
 
 };
 
-std::tm convertStringToTm(const std::string &date) {
+std::chrono::year_month_day convertStringToDate(const std::string &date) {
 
     std::tm tm = {};
     std::istringstream ss(date);
     ss >> std::get_time(&tm, "%Y-%m-%d");
-    return tm;
+    if (ss.fail()) {
+        throw std::runtime_error("Wrong date format");
+    }
+
+    return std::chrono::year_month_day(std::chrono::year(tm.tm_year + 1900), std::chrono::month(tm.tm_mon + 1),
+                                       std::chrono::day(tm.tm_mday));
 }
 
 void commander(int nCommands) {
@@ -85,9 +106,10 @@ void commander(int nCommands) {
             std::string to;
             int value;
             std::cin >> from >> to >> value;
-            auto t_from = convertStringToTm(from);
-            auto t_to = convertStringToTm(to);
+            auto t_from = convertStringToDate(from);
+            auto t_to = convertStringToDate(to);
             balance.addEarn(Earn(t_from, t_to, value));
+
         } else if (command == "ComputeIncome") {
             std::string from;
             std::string to;
