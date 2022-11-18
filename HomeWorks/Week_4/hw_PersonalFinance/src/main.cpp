@@ -54,7 +54,7 @@ private:
     std::chrono::year_month_day to_;
 
 
-    int value_;
+    double value_;
 };
 
 
@@ -66,8 +66,7 @@ public:
     void addEarn(const Earn &earn) {
 
         earns_.push_back(earn);
-        std::cout << "Earn added" << std::endl;
-        std::cout << "Earn per day: " << getEarnPerDay(earn) << std::endl;
+
     }
 
 
@@ -100,8 +99,7 @@ public:
 
     [[nodiscard]] static double getEarnPerDay(const Earn &earn) {
 
-        return earn.value() / ((std::chrono::sys_days(earn.to())).time_since_epoch() -
-                               (std::chrono::sys_days(earn.from())).time_since_epoch()).count();
+        return earn.value() / getDaysBetweenDates(earn.from(), earn.to());
     }
 
 private:
@@ -110,8 +108,11 @@ private:
 
     static int getDaysBetweenDates(std::chrono::year_month_day from, std::chrono::year_month_day to) {
 
+        if (from == to) {
+            return 1;
+        }
         return ((std::chrono::sys_days(to)).time_since_epoch() -
-                (std::chrono::sys_days(from)).time_since_epoch()).count();
+                (std::chrono::sys_days(from)).time_since_epoch()).count() + 1;
     }
 
 
