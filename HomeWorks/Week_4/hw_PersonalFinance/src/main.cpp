@@ -2,7 +2,7 @@
 // Created by Dmitry Morozov on 20/9/22.
 //
 
-#include <algorithm>
+
 #include <chrono>
 #include <iostream>
 #include <map>
@@ -10,12 +10,11 @@
 #include <vector>
 #include <numeric>
 #include <sstream>
-#include <ctime>
 #include <iomanip>
 
 ///Convert string "YYYY-MM-DD" to date
 
-std::chrono::year_month_day convertStringToDate(const std::string &date) {
+std::chrono::system_clock::time_point convertStringToDate(const std::string &date) {
 
     std::tm tm = {};
     std::istringstream ss(date);
@@ -24,13 +23,16 @@ std::chrono::year_month_day convertStringToDate(const std::string &date) {
         throw std::runtime_error("Wrong date format");
     }
 
-    return std::chrono::year_month_day(std::chrono::year(tm.tm_year + 1900), std::chrono::month(tm.tm_mon + 1),
-                                       std::chrono::day(tm.tm_mday));
+//    return std::chrono::year_month_day(std::chrono::year(tm.tm_year + 1900), std::chrono::month(tm.tm_mon + 1),
+//                                       std::chrono::day(tm.tm_mday));
+
+    return std::chrono::system_clock::from_time_t(std::mktime(&tm));
 }
 
 class Earn {
 public:
-    Earn(std::chrono::year_month_day from, std::chrono::year_month_day to, int value) : value_(value) {
+    Earn(std::chrono::system_clock::time_point from, std::chrono::system_clock::time_point to, int value) : value_(
+            value) {
 
         if (from > to) {
             throw std::invalid_argument("from > to");
@@ -44,14 +46,16 @@ public:
 
     [[nodiscard]] int value() const { return value_; }
 
-    [[nodiscard]] std::chrono::year_month_day from() const { return from_; }
+    [[nodiscard]] std::chrono::system_clock::time_point from() const { return from_; }
 
-    [[nodiscard]] std::chrono::year_month_day to() const { return to_; }
+    [[nodiscard]] std::chrono::system_clock::time_point to() const { return to_; }
 
 private:
 
-    std::chrono::year_month_day from_;
-    std::chrono::year_month_day to_;
+//    std::chrono::year_month_day from_;
+//    std::chrono::year_month_day to_;
+    std::chrono::system_clock::time_point from_;
+    std::chrono::system_clock::time_point to_;
 
 
     double value_;
@@ -66,6 +70,10 @@ public:
     void addEarn(const Earn &earn) {
 
         earns_.push_back(earn);
+
+        std::cout << "Earn added: " << earn.value() << std::endl;
+        std::cout << "Value per day: " << earn.value() / getEarnPerDay(earn) << std::endl;
+
 
     }
 
@@ -99,20 +107,24 @@ public:
 
     [[nodiscard]] static double getEarnPerDay(const Earn &earn) {
 
-        return earn.value() / getDaysBetweenDates(earn.from(), earn.to());
+      long long  days = getDaysBetweenDates(earn.from(), earn.to());
+        return earn.value() / days;
     }
 
 private:
     std::vector<Earn> earns_;
 
 
-    static int getDaysBetweenDates(std::chrono::year_month_day from, std::chrono::year_month_day to) {
+    static long
+    getDaysBetweenDates(std::chrono::system_clock::time_point from, std::chrono::system_clock::time_point to) {
 
-        if (from == to) {
-            return 1;
-        }
-        return ((std::chrono::sys_days(to)).time_since_epoch() -
-                (std::chrono::sys_days(from)).time_since_epoch()).count() + 1;
+//        if (from == to) {
+//            return 1;
+//        }
+//        return ((std::chrono::sys_days(to)).time_since_epoch() -
+//                (std::chrono::sys_days(from)).time_since_epoch()).count() + 1;
+
+        return ((to - from).count() / 86400) + 1;
     }
 
 
