@@ -23,7 +23,7 @@ std::time_t convertStringToDate(const std::string &date) {
         throw std::runtime_error("Wrong date format");
     }
 
-    return std::mktime(&tm);
+    return std::mktime(&tm); // convert to time_t
 }
 
 class Earn {
