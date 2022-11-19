@@ -3,7 +3,7 @@
 //
 
 
-#include <chrono>
+#include <ctime>
 #include <iostream>
 #include <map>
 #include <utility>
@@ -14,7 +14,7 @@
 
 ///Convert string "YYYY-MM-DD" to date
 
-std::chrono::system_clock::time_point convertStringToDate(const std::string &date) {
+std::time_t convertStringToDate(const std::string &date) {
 
     std::tm tm = {};
     std::istringstream ss(date);
@@ -23,10 +23,7 @@ std::chrono::system_clock::time_point convertStringToDate(const std::string &dat
         throw std::runtime_error("Wrong date format");
     }
 
-//    return std::chrono::year_month_day(std::chrono::year(tm.tm_year + 1900), std::chrono::month(tm.tm_mon + 1),
-//                                       std::chrono::day(tm.tm_mday));
-
-    return std::chrono::system_clock::from_time_t(std::mktime(&tm));
+    return std::mktime(&tm);
 }
 
 class Earn {
