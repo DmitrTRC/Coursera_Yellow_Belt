@@ -28,7 +28,7 @@ std::time_t convertStringToDate(const std::string &date) {
 
 class Earn {
 public:
-    Earn(std::chrono::system_clock::time_point from, std::chrono::system_clock::time_point to, int value) : value_(
+    Earn(std::time_t from, std::time_t to, int value) : value_(
             value) {
 
         if (from > to) {
@@ -43,17 +43,14 @@ public:
 
     [[nodiscard]] int value() const { return value_; }
 
-    [[nodiscard]] std::chrono::system_clock::time_point from() const { return from_; }
+    [[nodiscard]] std::time_t from() const { return from_; }
 
-    [[nodiscard]] std::chrono::system_clock::time_point to() const { return to_; }
+    [[nodiscard]] std::time_t to() const { return to_; }
 
 private:
 
-//    std::chrono::year_month_day from_;
-//    std::chrono::year_month_day to_;
-    std::chrono::system_clock::time_point from_;
-    std::chrono::system_clock::time_point to_;
-
+    std::time_t from_;
+    std::time_t to_;
 
     double value_;
 };
@@ -104,7 +101,7 @@ public:
 
     [[nodiscard]] static double getEarnPerDay(const Earn &earn) {
 
-      long long  days = getDaysBetweenDates(earn.from(), earn.to());
+        long long days = getDaysBetweenDates(earn.from(), earn.to());
         return earn.value() / days;
     }
 
@@ -112,16 +109,9 @@ private:
     std::vector<Earn> earns_;
 
 
-    static long
-    getDaysBetweenDates(std::chrono::system_clock::time_point from, std::chrono::system_clock::time_point to) {
+    static long getDaysBetweenDates(std::time_t from, std::time_t to) {
 
-//        if (from == to) {
-//            return 1;
-//        }
-//        return ((std::chrono::sys_days(to)).time_since_epoch() -
-//                (std::chrono::sys_days(from)).time_since_epoch()).count() + 1;
-
-        return ((to - from).count() / 86400) + 1;
+        return ((to - from) / (60 * 60 * 24)) + 1;
     }
 
 
