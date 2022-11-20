@@ -65,8 +65,8 @@ public:
 
         earns_.push_back(earn);
 
-        std::cout << "Earn added: " << earn.value() << std::endl;
-        std::cout << "Value per day: " << earn.value() / getEarnPerDay(earn) << std::endl;
+//        std::cout << "Earn added: " << earn.value() << std::endl;
+//        std::cout << "Value per day: " << earn.value() / getEarnPerDay(earn) << std::endl;
 
 
     }
@@ -138,6 +138,7 @@ void commander(int nCommands) {
             std::string from;
             std::string to;
             std::cin >> from >> to;
+
             std::cout.precision(25);
             std::cout << balance.computeIncome(from, to) << std::endl;
         }
