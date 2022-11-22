@@ -3,25 +3,22 @@
 //
 
 #include <iostream>
+#include <iterator>
 #include <map>
+#include <algorithm>
 
+// Write using binary search
 std::string FindNameByYear(const std::map<int, std::string> &names, int year) {
-
-    std::string name;  // изначально имя неизвестно
-
-    // перебираем всю историю по возрастанию ключа словаря, то есть в хронологическом порядке
-    for (const auto &item: names) {
-        // если очередной год не больше данного, обновляем имя
-        if (item.first <= year) {
-            name = item.second;
-        } else {
-            // иначе пора остановиться, так как эта запись и все последующие относятся к будущему
-            break;
-        }
+    std::string name;
+    auto it = names.upper_bound(year);
+    if (it != names.begin()) {
+        name = (--it)->second;
     }
-
     return name;
 }
+
+
+
 
 class Person {
 public:
@@ -63,7 +60,7 @@ private:
     std::map<int, std::string> last_names;
 };
 
-int main() {
-
-    return 0;
-}
+//int main() {
+//
+//    return 0;
+//}

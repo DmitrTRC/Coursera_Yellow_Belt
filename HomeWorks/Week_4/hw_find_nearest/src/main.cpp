@@ -14,7 +14,7 @@ std::set<int>::const_iterator FindNearestElement(
 
     }
 
-    auto it = numbers.lower_bound(border);
+    auto it  = numbers.lower_bound(border);
 
 if (it == numbers.begin()) {
         return it;
@@ -42,7 +42,7 @@ if (it == numbers.begin()) {
 //    std::cout << *FindNearestElement(numbers, 6) << std::endl;
 //    std::cout << *FindNearestElement(numbers, 8) << std::endl;
 //    std::cout << *FindNearestElement(numbers, 100) << std::endl;
-
-
-    return 0;
-}
+//
+//
+//    return 0;
+//}
