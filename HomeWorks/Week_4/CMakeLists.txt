@@ -7,5 +7,7 @@ add_subdirectory(hw_DemographicStat)
 add_subdirectory(hw_merge_sort)
 add_subdirectory(hw_PersonalFinance)
 add_subdirectory(hw_find_nearest)
+add_subdirectory(hw_person_II)
+
 
 
