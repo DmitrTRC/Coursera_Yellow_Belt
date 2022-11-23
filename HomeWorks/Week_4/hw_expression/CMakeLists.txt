@@ -18,3 +18,8 @@ add_executable(
         src/main.cpp
 )
 
+add_executable(
+        expression2
+        src/main2.cpp
+)
+
