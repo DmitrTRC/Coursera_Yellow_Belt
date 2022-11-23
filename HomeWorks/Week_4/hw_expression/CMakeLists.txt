@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(prefix_run)
+project(expression)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${prefix_run_SOURCE_DIR}/bin)
-message(STATUS "prefix_run Output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${expression_SOURCE_DIR}/bin)
+message(STATUS "expression Output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 
 
 ############################################################
@@ -14,12 +14,7 @@ message(STATUS "prefix_run Output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 
 # Add an executable with the above sources
 add_executable(
-        prefix_run
+        expression
         src/main.cpp
-)
-
-add_executable(
-        prefix_run2
-        src/main2.cpp
 )
 
