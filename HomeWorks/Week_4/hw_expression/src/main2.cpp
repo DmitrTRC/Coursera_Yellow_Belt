@@ -4,7 +4,7 @@
 
 
 #include <iostream>
-
+#include <deque>
 #include <map>
 
 std::map<char, int> opPriority = {
@@ -19,7 +19,7 @@ std::map<char, int> opPriority = {
 };
 
 
-void add_operation(std::string &expression, std::string &next_operation) {
+void add_operation(std::deque<std::string> &expression, std::string &next_operation) {
 
     // Set front bracket
     static char last_operation = ' ';
@@ -27,17 +27,18 @@ void add_operation(std::string &expression, std::string &next_operation) {
 
     if (opPriority[last_operation] < opPriority[next_operation[0]]) {
 
-        expression.insert(expression.begin(), '(');
-        expression.append(") ");
+//        expression.insert(expression.begin(), '(');
+        expression.push_front("(");
+        expression.push_back(") ");
+
 
     } else {
-        expression.append(" ");
+        expression.push_back(" ");
     }
 
-    expression.append(next_operation);
+    expression.push_back(next_operation);
 
     last_operation = next_operation[0];
-
 }
 
 
@@ -54,8 +55,10 @@ int main() {
         return 0;
     }
 
-    std::string expression = std::to_string(x);
-    //expression.reserve(2 * N + 1);
+    std::deque<std::string> expression;
+
+    expression.push_back(std::to_string(x));
+
 
     std::cin.ignore();
 
@@ -67,8 +70,10 @@ int main() {
         add_operation(expression, operation);
     }
 
-    std::cout << expression << std::endl;
-
+    for (auto &item: expression) {
+        std::cout << item;
+    }
+    std::cout << std::endl;
 
     return 0;
 }
