@@ -4,7 +4,7 @@
 
 
 #include <iostream>
-#include <iterator>
+
 #include <map>
 
 std::map<char, int> opPriority = {
@@ -14,7 +14,8 @@ std::map<char, int> opPriority = {
         {'/', 2},
         {'^', 3},
         {'(', 0},
-        {')', 0}
+        {')', 0},
+        {' ', 100}
 };
 
 
@@ -23,16 +24,17 @@ void add_operation(std::string &expression, std::string &next_operation) {
     // Set front bracket
     static char last_operation = ' ';
 
+
     if (opPriority[last_operation] < opPriority[next_operation[0]]) {
 
         expression.insert(expression.begin(), '(');
         expression.append(") ");
 
-        // Add operation
-        expression += next_operation;
     } else {
-        expression += next_operation;
+        expression.append(" ");
     }
+
+    expression.append(next_operation);
 
     last_operation = next_operation[0];
 
@@ -53,6 +55,8 @@ int main() {
     }
 
     std::string expression = std::to_string(x);
+    //expression.reserve(2 * N + 1);
+
     std::cin.ignore();
 
     for (int i = 0; i < N; ++i) {
