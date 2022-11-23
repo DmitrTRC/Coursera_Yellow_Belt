@@ -3,9 +3,16 @@
 //
 
 #include <iostream>
+#include <iterator>
 
 
-std::string add_operation(std::string &expression, std::string &next_operation) {
+void add_operation(std::string &expression, std::string &next_operation) {
+    // Set front bracket
+    expression.insert(expression.begin(), '(');
+    expression.append(") ");
+
+    // Add operation
+    expression += next_operation;
 
 }
 
@@ -22,13 +29,15 @@ int main() {
         return 0;
     }
 
-    std::string expression;
+    std::string expression = std::to_string(x);
+    std::cin.ignore();
 
     for (int i = 0; i < N; ++i) {
         std::string operation;
+
         std::getline(std::cin, operation);
 
-        expression = add_operation(expression, operation);
+        add_operation(expression, operation);
     }
 
     std::cout << expression << std::endl;
