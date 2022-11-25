@@ -5,112 +5,108 @@
 #include <string>
 #include <vector>
 
-using namespace std;
 
+class Human {
+public:
+    Human(const std::string &name, const std::string &type) : Name(name), Type(type) {}
 
-class Student {
+    virtual void Walk(const std::string &destination) const {
+
+        std::cout << Type << ": " << Name << " walks to: " << destination << std::endl;
+    }
+
+    const std::string Name;
+    const std::string Type;
+};
+
+class Student : public Human {
 public:
 
-    Student(string name, string favouriteSong) {
+    Student(const std::string &name, const std::string &favouriteSong) : Human(name, "Student"),
+                                                                         FavouriteSong(favouriteSong) {}
 
-        Name = name;
-        FavouriteSong = favouriteSong;
+    void Learn() const {
+
+        std::cout << "Student: " << Name << " learns" << std::endl;
     }
 
-    void Learn() {
+    void Walk(const std::string &destination) const override {
 
-        cout << "Student: " << Name << " learns" << endl;
+        Human::Walk(destination);
+        SingSong();
     }
 
-    void Walk(string destination) {
+    void SingSong() const {
 
-        cout << "Student: " << Name << " walks to: " << destination << endl;
-        cout << "Student: " << Name << " sings a song: " << FavouriteSong << endl;
-    }
-
-    void SingSong() {
-
-        cout << "Student: " << Name << " sings a song: " << FavouriteSong << endl;
+        std::cout << "Student: " << Name << " sings a song: " << FavouriteSong << std::endl;
     }
 
 public:
-    string Name;
-    string FavouriteSong;
+    std::string Name;
+    std::string FavouriteSong;
 };
 
 
 class Teacher {
 public:
-
-    Teacher(string name, string subject) {
-
-        Name = name;
-        Subject = subject;
-    }
+    Teacher(std::string name, std::string subject) : Name(std::move(name)), Subject(std::move(subject)) {}
 
     void Teach() {
 
-        cout << "Teacher: " << Name << " teaches: " << Subject << endl;
+        std::cout << "Teacher: " << Name << " teaches: " << Subject << std::endl;
     }
 
-    void Walk(string destination) {
-
-        cout << "Teacher: " << Name << " walks to: " << destination << endl;
-    }
 
 public:
-    string Name;
-    string Subject;
+    std::string Name;
+    std::string Subject;
 };
 
 
 class Policeman {
 public:
-    Policeman(string name) {
-
-        Name = name;
-    }
+    Policeman(std::string name) : Name(std::move(name)) {}
 
     void Check(Teacher t) {
 
-        cout << "Policeman: " << Name << " checks Teacher. Teacher's name is: " << t.Name << endl;
+        std::cout << "Policeman: " << Name << " checks Teacher. Teacher's name is: " << t.Name << std::endl;
     }
 
     void Check(Student s) {
 
-        cout << "Policeman: " << Name << " checks Student. Student's name is: " << s.Name << endl;
+        std::cout << "Policeman: " << Name << " checks Student. Student's name is: " << s.Name << std::endl;
     }
 
     void Check(Policeman p) {
 
-        cout << "Policeman: " << Name << " checks Policeman. Policeman's name is: " << p.Name << endl;
+        std::cout << "Policeman: " << Name << " checks Policeman. Policeman's name is: " << p.Name << std::endl;
     }
 
-    void Walk(string destination) {
+    void Walk(std::string destination) {
 
-        cout << "Policeman: " << Name << " walks to: " << destination << endl;
+        std::cout << "Policeman: " << Name << " walks to: " << destination << std::endl;
     }
 
 public:
-    string Name;
+    std::string Name;
 };
 
 
-void VisitPlaces(Teacher t, vector<string> places) {
+void VisitPlaces(Teacher t, std::vector<std::string> places) {
 
     for (auto p: places) {
         t.Walk(p);
     }
 }
 
-void VisitPlaces(Student s, vector<string> places) {
+void VisitPlaces(Student s, std::vector<std::string> places) {
 
     for (auto p: places) {
         s.Walk(p);
     }
 }
 
-void VisitPlaces(Policeman pol, vector<string> places) {
+void VisitPlaces(Policeman pol, std::vector<std::string> places) {
 
     for (auto p: places) {
         pol.Walk(p);
@@ -131,7 +127,7 @@ int main() {
 }
 
 /* Output:
- * Teacher: Jim walks to: Moscow
+Teacher: Jim walks to: Moscow
 Teacher: Jim walks to: London
 Policeman: Bob checks Student. Student's name is: Ann
 Student: Ann walks to: Moscow
