@@ -25,9 +25,6 @@ public:
 
     string name_;
 
-    double perimeter_;
-
-    double area_;
 
 };
 
