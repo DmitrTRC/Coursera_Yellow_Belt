@@ -129,3 +129,15 @@ int main() {
     VisitPlaces(s, {"Moscow", "London"});
     return 0;
 }
+
+/* Output:
+ * Teacher: Jim walks to: Moscow
+Teacher: Jim walks to: London
+Policeman: Bob checks Student. Student's name is: Ann
+Student: Ann walks to: Moscow
+Student: Ann sings a song: We will rock you
+Student: Ann walks to: London
+Student: Ann sings a song: We will rock you
+
+Process finished with exit code 0
+*/
