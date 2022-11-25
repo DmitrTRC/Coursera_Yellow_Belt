@@ -3,8 +3,33 @@
 //
 
 #include <iostream>
+#include <sstream>
 
 using namespace std;
+
+// базовый класс Figure с чисто виртуальными методами Name, Perimeter и Area;
+//
+// классы Triangle, Rect и Circle, которые являются наследниками класса Figure и переопределяют его виртуальные методы;
+//
+// функцию CreateFigure, которая в зависимости от содержимого входного потока создаёт shared_ptr<Rect>, shared_ptr<Triangle> или shared_ptr<Circle>.
+
+class Figure {
+public:
+    virtual string Name() const = 0;
+
+    virtual double Perimeter() const = 0;
+
+    virtual double Area() const = 0;
+
+    private:
+
+    string name_;
+
+    double perimeter_;
+
+    double area_;
+
+};
 
 int main() {
 
