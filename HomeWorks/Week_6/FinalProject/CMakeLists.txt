@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${final_SOURCE_DIR}/bin)
 message(STATUS "final Output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 
+include_directories(.)
 
 ############################################################
 # Create an executable
@@ -16,5 +17,11 @@ message(STATUS "final Output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 add_executable(
         final
         src/main.cpp
+        src/date.cpp
+        src/database.cpp
+        src/node.cpp
+        src/condition_parser.cpp
+        src/token.cpp
+        src/condition_parser_test.cpp
 )
 
