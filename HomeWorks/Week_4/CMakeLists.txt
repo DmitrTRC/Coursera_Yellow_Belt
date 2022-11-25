@@ -11,7 +11,7 @@ add_subdirectory(hw_find_nearest)
 add_subdirectory(hw_person_II)
 add_subdirectory(hw_prefix)
 add_subdirectory(hw_expression)
-add_subdirectory(hw_inheritance)
+
 
 
 
