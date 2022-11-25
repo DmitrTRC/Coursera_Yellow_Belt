@@ -8,15 +8,26 @@
 
 class Human {
 public:
-    Human(const std::string &name, const std::string &type) : Name(name), Type(type) {}
+    Human(const std::string &name, const std::string &type) : name_(name), type_(type) {}
+
+    std::string Name() const {
+
+        return name_;
+    }
+
+    std::string Type() const {
+
+        return type_;
+    }
 
     virtual void Walk(const std::string &destination) const {
 
-        std::cout << Type << ": " << Name << " walks to: " << destination << std::endl;
+        std::cout << Type() << ": " << Name() << " walks to: " << destination << std::endl;
     }
 
-    const std::string Name;
-    const std::string Type;
+protected:
+    const std::string type_;
+    const std::string name_;
 };
 
 class Student : public Human {
@@ -27,7 +38,7 @@ public:
 
     void Learn() const {
 
-        std::cout << "Student: " << Name << " learns" << std::endl;
+        std::cout << "Student: " << Name() << " learns" << std::endl;
     }
 
     void Walk(const std::string &destination) const override {
@@ -38,81 +49,48 @@ public:
 
     void SingSong() const {
 
-        std::cout << "Student: " << Name << " sings a song: " << FavouriteSong << std::endl;
+        std::cout << "Student: " << Name() << " sings a song: " << FavouriteSong << std::endl;
     }
 
-public:
-    std::string Name;
+private:
     std::string FavouriteSong;
 };
 
 
-class Teacher {
+class Teacher : public Human {
 public:
-    Teacher(std::string name, std::string subject) : Name(std::move(name)), Subject(std::move(subject)) {}
+
+    Teacher(const std::string &name, const std::string &subject) : Human(name, "Teacher"), Subject(subject) {}
 
     void Teach() {
 
-        std::cout << "Teacher: " << Name << " teaches: " << Subject << std::endl;
+        std::cout << "Teacher: " << Name() << " teaches: " << Subject << std::endl;
     }
 
 
 public:
-    std::string Name;
     std::string Subject;
 };
 
 
-class Policeman {
+class Policeman : public Human {
 public:
-    Policeman(std::string name) : Name(std::move(name)) {}
+    explicit Policeman(const std::string &name) : Human(name, "Policeman") {}
 
-    void Check(Teacher t) {
+    void Check(const Human &h) const {
 
-        std::cout << "Policeman: " << Name << " checks Teacher. Teacher's name is: " << t.Name << std::endl;
+        std::cout << "Policeman: " << Name() << " checks " << h.Type() << ". " << h.Type() << "'s name is: " << h.Name()
+                  << std::endl;
     }
-
-    void Check(Student s) {
-
-        std::cout << "Policeman: " << Name << " checks Student. Student's name is: " << s.Name << std::endl;
-    }
-
-    void Check(Policeman p) {
-
-        std::cout << "Policeman: " << Name << " checks Policeman. Policeman's name is: " << p.Name << std::endl;
-    }
-
-    void Walk(std::string destination) {
-
-        std::cout << "Policeman: " << Name << " walks to: " << destination << std::endl;
-    }
-
-public:
-    std::string Name;
 };
 
 
-void VisitPlaces(Teacher t, std::vector<std::string> places) {
+void VisitPlaces(const Human &h, const std::vector<std::string> &places) {
 
-    for (auto p: places) {
-        t.Walk(p);
+    for (const auto &p: places) {
+        h.Walk(p);
     }
 }
-
-void VisitPlaces(Student s, std::vector<std::string> places) {
-
-    for (auto p: places) {
-        s.Walk(p);
-    }
-}
-
-void VisitPlaces(Policeman pol, std::vector<std::string> places) {
-
-    for (auto p: places) {
-        pol.Walk(p);
-    }
-}
-
 
 int main() {
 
