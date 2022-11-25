@@ -2,20 +2,20 @@
 // Created by Dmitry Morozov on 20/9/22.
 //
 #include <iostream>
-#include <string>
+#include <utility>
 #include <vector>
-
 
 class Human {
 public:
-    Human(const std::string &name, const std::string &type) : name_(name), type_(type) {}
 
-    std::string Name() const {
+    Human(std::string name, std::string type) : name_(std::move(name)), type_(std::move(type)) {}
+
+    [[nodiscard]] std::string Name() const {
 
         return name_;
     }
 
-    std::string Type() const {
+    [[nodiscard]] std::string Type() const {
 
         return type_;
     }
@@ -26,6 +26,7 @@ public:
     }
 
 protected:
+
     const std::string type_;
     const std::string name_;
 };
@@ -33,8 +34,8 @@ protected:
 class Student : public Human {
 public:
 
-    Student(const std::string &name, const std::string &favouriteSong) : Human(name, "Student"),
-                                                                         FavouriteSong(favouriteSong) {}
+    Student(const std::string &name, std::string favouriteSong) : Human(name, "Student"),
+                                                                  FavouriteSong(std::move(favouriteSong)) {}
 
     void Learn() const {
 
@@ -53,6 +54,7 @@ public:
     }
 
 private:
+
     std::string FavouriteSong;
 };
 
@@ -60,21 +62,22 @@ private:
 class Teacher : public Human {
 public:
 
-    Teacher(const std::string &name, const std::string &subject) : Human(name, "Teacher"), Subject(subject) {}
+    Teacher(const std::string &name, std::string subject) : Human(name, "Teacher"), Subject(std::move(subject)) {}
 
-    void Teach() {
+    [[maybe_unused]] void Teach() {
 
         std::cout << "Teacher: " << Name() << " teaches: " << Subject << std::endl;
     }
 
 
-public:
+private:
     std::string Subject;
 };
 
 
 class Policeman : public Human {
 public:
+
     explicit Policeman(const std::string &name) : Human(name, "Policeman") {}
 
     void Check(const Human &h) const {
@@ -101,17 +104,6 @@ int main() {
     VisitPlaces(t, {"Moscow", "London"});
     p.Check(s);
     VisitPlaces(s, {"Moscow", "London"});
+
     return 0;
 }
-
-/* Output:
-Teacher: Jim walks to: Moscow
-Teacher: Jim walks to: London
-Policeman: Bob checks Student. Student's name is: Ann
-Student: Ann walks to: Moscow
-Student: Ann sings a song: We will rock you
-Student: Ann walks to: London
-Student: Ann sings a song: We will rock you
-
-Process finished with exit code 0
-*/
