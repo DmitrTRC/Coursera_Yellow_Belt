@@ -26,5 +26,6 @@ void Database::Print(std::ostream &os) const {
 template<typename Predicate>
 int Database::RemoveIf(Predicate predicate) {
 
-    return 0;
+
+
 }
