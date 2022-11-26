@@ -23,5 +23,6 @@ add_executable(
         src/condition_parser.cpp
         src/token.cpp
         src/condition_parser_test.cpp
+        src/test_runner.cpp
 )
 
