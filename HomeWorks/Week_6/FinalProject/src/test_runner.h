@@ -15,6 +15,7 @@
 
 using namespace std;
 
+//TODO: Refactor this
 template<class T>
 ostream &operator<<(ostream &os, const vector<T> &s) {
 
