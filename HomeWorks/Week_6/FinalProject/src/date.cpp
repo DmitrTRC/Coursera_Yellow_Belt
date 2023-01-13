@@ -9,42 +9,130 @@
 
 Date::Date(int new_year, int new_month, int new_day) {
 
-    year_ = new_year;
     if (new_month > 12 || new_month < 1) {
-        throw std::logic_error("Month value is invalid: " + std::to_string(new_month));
+        std::string error = "Month value is invalid: " + std::to_string(new_month);
+        throw std::logic_error(error);
+    } else {
+        month = new_month;
     }
-    month_ = new_month;
+
     if (new_day > 31 || new_day < 1) {
-        throw std::logic_error("Day value is invalid: " + std::to_string(new_day));
+        std::string error = "Day value is invalid: " + std::to_string(new_day);
+        throw std::logic_error(error);
+    } else {
+        day = new_day;
     }
-    day_ = new_day;
+    year = new_year;
 }
 
-int Date::GetMonth() const {
+int Date::GetMonth() const noexcept {
 
-    return month_;
+    return month;
 }
 
-int Date::GetYear() const {
+int Date::GetYear() const noexcept {
 
-    return year_;
+    return year;
 }
 
-int Date::GetDay() const {
+int Date::GetDay() const noexcept {
 
-    return day_;
+    return day;
 }
 
-bool operator<(const Date &lhs, const Date &rhs) {
+std::string Date::DateToStr() const {
 
-    return std::vector<int>{lhs.GetYear(), lhs.GetMonth(), lhs.GetDay()} <
-           std::vector<int>{rhs.GetYear(), rhs.GetMonth(), rhs.GetDay()};
+    std::stringstream ss;
+    ss << *this;
+    return ss.str();
 }
 
-std::ostream &operator<<(std::ostream &stream, const Date &date) {
+Date::Date() noexcept {
 
-    stream << std::setw(4) << std::setfill('0') << date.GetYear() <<
-           "-" << std::setw(2) << std::setfill('0') << date.GetMonth() <<
-           "-" << std::setw(2) << std::setfill('0') << date.GetDay();
-    return stream;
+    year = 0;
+    month = 0;
+    day = 0;
+
+}
+
+Date ParseDate(std::istream &is) {
+
+    std::string str_date;
+    is >> str_date;
+
+    std::stringstream str_stream_date(str_date);
+
+    int year = -1;
+    str_stream_date >> year;
+
+    if (str_stream_date.fail() || str_stream_date.peek() != '-') {
+        throw std::logic_error("Wrong date format: " + str_date);
+    }
+    str_stream_date.ignore();
+
+    int month = -1;
+    str_stream_date >> month;
+
+    if (str_stream_date.fail() || str_stream_date.peek() != '-') {
+        throw std::logic_error("Wrong date format: " + str_date);
+    }
+    str_stream_date.ignore();
+
+    int day = -1;
+    str_stream_date >> day;
+
+    if (str_stream_date.fail() || !str_stream_date.eof()) {
+        throw std::logic_error("Wrong date format: " + str_date);
+    }
+    return {year, month, day};
+}
+
+std::ostream &operator<<(std::ostream &os, const Date &date) {
+
+    os << std::setw(4) << std::setfill('0') << date.GetYear() << '-';
+    os << std::setw(2) << std::setfill('0') << date.GetMonth() << '-';
+    os << std::setw(2) << std::setfill('0') << date.GetDay();
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, const std::pair<Date, std::string> &pair) {
+
+    os << pair.first << " " << pair.second;
+    return os;
+}
+
+bool operator<(const Date &lhs, const Date &rhs) noexcept {
+
+    return std::make_tuple(lhs.GetYear(), lhs.GetMonth(), lhs.GetDay()) <
+           std::make_tuple(rhs.GetYear(), rhs.GetMonth(), rhs.GetDay());
+}
+
+bool operator<=(const Date &lhs, const Date &rhs) noexcept {
+
+    return std::make_tuple(lhs.GetYear(), lhs.GetMonth(), lhs.GetDay()) <=
+           std::make_tuple(rhs.GetYear(), rhs.GetMonth(), rhs.GetDay());
+}
+
+bool operator>(const Date &lhs, const Date &rhs) noexcept {
+
+    return std::make_tuple(lhs.GetYear(), lhs.GetMonth(), lhs.GetDay()) >
+           std::make_tuple(rhs.GetYear(), rhs.GetMonth(), rhs.GetDay());
+}
+
+bool operator>=(const Date &lhs, const Date &rhs) noexcept {
+
+    return std::make_tuple(lhs.GetYear(), lhs.GetMonth(), lhs.GetDay()) >=
+           std::make_tuple(rhs.GetYear(), rhs.GetMonth(), rhs.GetDay());
+}
+
+bool operator==(const Date &lhs, const Date &rhs) noexcept {
+
+    return std::make_tuple(lhs.GetYear(), lhs.GetMonth(), lhs.GetDay()) ==
+           std::make_tuple(rhs.GetYear(), rhs.GetMonth(), rhs.GetDay());
+}
+
+bool operator!=(const Date &lhs, const Date &rhs) noexcept {
+
+    return std::make_tuple(lhs.GetYear(), lhs.GetMonth(), lhs.GetDay()) !=
+           std::make_tuple(rhs.GetYear(), rhs.GetMonth(), rhs.GetDay());
 }

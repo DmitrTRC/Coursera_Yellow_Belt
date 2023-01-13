@@ -18,7 +18,7 @@ public:
 
     void Print(std::ostream &is) const;
 
-    std::string Last(const Date &date) const;
+    [[nodiscard]] std::string Last(const Date &date) const;
 
     template<typename Functor>
     int RemoveIf(const Functor &func);

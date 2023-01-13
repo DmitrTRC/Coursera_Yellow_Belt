@@ -5,27 +5,48 @@
 #ifndef COURSERA_YELLOW_BELT_DEV_DATE_H
 #define COURSERA_YELLOW_BELT_DEV_DATE_H
 
-#include <ostream>
+#include <string>
+#include <stdexcept>
+#include <sstream>
+#include <iomanip>
+#include <memory>
 
 class Date {
 public:
+    Date() noexcept;
 
-    Date(int, int, int);
+    Date(int new_year, int new_month, int new_day);
 
-    [[nodiscard]] int GetYear() const;
+    [[nodiscard]] int GetYear() const noexcept;
 
-    [[nodiscard]] int GetMonth() const;
+    [[nodiscard]] int GetMonth() const noexcept;
 
-    [[nodiscard]] int GetDay() const;
+    [[nodiscard]] int GetDay() const noexcept;
+
+    [[nodiscard]] std::string DateToStr() const;
 
 private:
-    int year_;
-    int month_;
-    int day_;
+    int year;
+    int month;
+    int day;
 };
 
-bool operator<(const Date &lhs, const Date &rhs);
+Date ParseDate(std::istream &is);
 
-std::ostream &operator<<(std::ostream &stream, const Date &date);
+std::ostream &operator<<(std::ostream &os, const Date &date);
+
+std::ostream &operator<<(std::ostream &os, const std::pair<Date, std::string> &pair);
+
+bool operator<(const Date &lsh, const Date &rhs) noexcept;
+
+bool operator<=(const Date &lsh, const Date &rhs) noexcept;
+
+bool operator>(const Date &lsh, const Date &rhs) noexcept;
+
+bool operator>=(const Date &lsh, const Date &rhs) noexcept;
+
+bool operator==(const Date &lsh, const Date &rhs) noexcept;
+
+bool operator!=(const Date &lsh, const Date &rhs) noexcept;
 
 #endif //COURSERA_YELLOW_BELT_DEV_DATE_H
