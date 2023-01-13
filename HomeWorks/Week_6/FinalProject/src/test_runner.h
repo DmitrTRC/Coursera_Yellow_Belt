@@ -5,19 +5,41 @@
 #ifndef COURSERA_YELLOW_BELT_DEV_TEST_RUNNER_H
 #define COURSERA_YELLOW_BELT_DEV_TEST_RUNNER_H
 
-#include <iostream>
-#include <map>
-#include <set>
-#include <sstream>
-#include <stdexcept>
 #include <string>
+#include <iostream>
+#include <sstream>
 #include <vector>
+#include <set>
+#include <map>
 
-using namespace std;
+class TestRunner {
+public:
+    template<typename test_func>
+    void RunTest(test_func func, const std::string &test_name);
 
-//TODO: Refactor this
-template<class T>
-ostream &operator<<(ostream &os, const vector<T> &s) {
+    TestRunner() = default;
+
+    ~TestRunner();
+
+private:
+    int fail_count = 0;
+};
+
+template<typename test_func>
+void TestRunner::RunTest(test_func func, const std::string &test_name) {
+
+    try {
+        func();
+        std::cerr << "PASSED: " << test_name << std::endl;
+    }
+    catch (const std::runtime_error &e) {
+        ++fail_count;
+        std::cerr << "FAIL: " << test_name << e.what() << std::endl;
+    }
+}
+
+template<typename T>
+std::ostream &operator<<(std::ostream &os, const std::set<T> &s) {
 
     os << "{";
     bool first = true;
@@ -31,27 +53,12 @@ ostream &operator<<(ostream &os, const vector<T> &s) {
     return os << "}";
 }
 
-template<class T>
-ostream &operator<<(ostream &os, const set<T> &s) {
+template<typename Key, typename Value>
+std::ostream &operator<<(std::ostream &os, const std::map<Key, Value> &map) {
 
     os << "{";
     bool first = true;
-    for (const auto &x: s) {
-        if (!first) {
-            os << ", ";
-        }
-        first = false;
-        os << x;
-    }
-    return os << "}";
-}
-
-template<class K, class V>
-ostream &operator<<(ostream &os, const map<K, V> &m) {
-
-    os << "{";
-    bool first = true;
-    for (const auto &kv: m) {
+    for (const auto &kv: map) {
         if (!first) {
             os << ", ";
         }
@@ -61,34 +68,32 @@ ostream &operator<<(ostream &os, const map<K, V> &m) {
     return os << "}";
 }
 
-template<class T, class U>
-void AssertEqual(const T &t, const U &u, const string &hint = {}) {
+template<typename T>
+std::ostream &operator<<(std::ostream &os, const std::vector<T> &s) {
+
+    os << "{";
+    bool first = true;
+    for (const auto &x: s) {
+        if (!first) {
+            os << ", ";
+        }
+        first = false;
+        os << x;
+    }
+    return os << "}";
+}
+
+void Assert(bool b, const std::string &hint);
+
+template<typename T, typename U>
+void AssertEqual(const T &t, const U &u, const std::string &hint) {
 
     if (t != u) {
-        ostringstream os;
-        os << "Assertion failed: " << t << " != " << u;
-        if (!hint.empty()) {
-            os << " hint: " << hint;
-        }
-        throw runtime_error(os.str());
+        std::ostringstream os;
+        os << " Assertion failed: " << std::endl;
+        os << t << " != " << u << " hint: " << hint;
+        throw std::runtime_error(os.str());
     }
 }
-
-void Assert(bool b, const string &hint) {
-
-    AssertEqual(b, true, hint);
-}
-
-class TestRunner {
-public:
-    template<class TestFunc>
-    void RunTest(TestFunc func, const string &test_name);
-
-    ~TestRunner();
-
-private:
-    int fail_count = 0;
-};
-
 
 #endif //COURSERA_YELLOW_BELT_DEV_TEST_RUNNER_H

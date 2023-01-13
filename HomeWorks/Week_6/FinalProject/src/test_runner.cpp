@@ -1,34 +1,20 @@
-//
-// Created by Dmitry Morozov on 26/11/22.
-//
-
 #include "test_runner.h"
 
-#include <iostream>
-#include <stdexcept>
+void Assert(bool b, const std::string &hint) {
 
-using namespace std;
-
-
-template<class TestFunc>
-void TestRunner::RunTest(TestFunc func, const string &test_name) {
-
-    try {
-        func();
-        cerr << test_name << " OK" << endl;
-    } catch (exception &e) {
-        ++fail_count;
-        cerr << test_name << " fail: " << e.what() << endl;
-    } catch (...) {
-        ++fail_count;
-        cerr << "Unknown exception caught" << endl;
-    }
+    AssertEqual(b, true, hint);
 }
 
 TestRunner::~TestRunner() {
 
     if (fail_count > 0) {
-        cerr << fail_count << " unit tests failed. Terminate" << endl;
+        std::cerr << "========================================" << std::endl;
+        std::cerr << "FAILED (failures = " << fail_count << ")" << std::endl;
+        std::cerr << "========================================" << std::endl;
         exit(1);
+    } else {
+        std::cerr << "========================================" << std::endl;
+        std::cerr << "OK" << std::endl;
+        std::cerr << "========================================" << std::endl;
     }
 }

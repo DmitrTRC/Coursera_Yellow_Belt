@@ -5,10 +5,8 @@
 #include "database.h"
 #include "date.h"
 
-#include <iostream>
 #include <iomanip>
 #include <map>
-#include <set>
 
 void Database::Add(const Date &date, const std::string &event) {
     if (db.count(date))

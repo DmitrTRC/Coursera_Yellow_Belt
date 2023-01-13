@@ -24,6 +24,6 @@ add_executable(
         src/token.cpp
         src/condition_parser_test.cpp
         src/test_runner.cpp
-        src/Helper.h
+#        src/Helper.h
 )
 
